@@ -1,0 +1,7 @@
+.firebase/
+.firebaserc
+node_modules/
+.playwright-mcp/
+*.pptx
+*.docx
+docs/superpowers/

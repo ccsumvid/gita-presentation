@@ -18,19 +18,24 @@ Single file: `index.html` containing all CSS, HTML, and JavaScript.
 ### Key Modules (all in `index.html`)
 
 1. **EMBEDDED_DHYANA** — Chapter 0 (Gita Dhyana Shlokas) data, embedded inline so it loads instantly with no network request.
-2. **prosody** — Sanskrit prosody engine. Splits Devanagari text into syllables, classifies guru (heavy, 2 beats) vs laghu (light, 1 beat) for pacing.
-3. **dataLayer** — Loads chapter data. Chapter 0 is embedded; chapters 1-18 are lazy-loaded from `data/chapter_XX.json`. Caches loaded chapters and prefetches the next chapter.
-4. **renderer** — Renders verse pages. Three display modes: Asterisk (hides text, shows `*` per syllable), IAST (transliterated Roman), Devanagari (original script).
+2. **prosody** — Sanskrit prosody engine (Devanagari). Splits Devanagari text into syllables, classifies guru (heavy, 2 beats) vs laghu (light, 1 beat) for pacing.
+3. **iastProsody** — IAST/ISO 15919 prosody engine. Same syllable/beat analysis but for romanized text. Used for chapters without Devanagari source (datta_stavam, sadguru_stavam, gita_mahatmyam, kshama_prarthana).
+4. **dataLayer** — Loads chapter data. Chapter 0 (Dhyana Shlokas) is embedded; others are lazy-loaded from `data/` JSON files. Supports string chapter IDs. Maintains ordered chapter list for navigation. Caches loaded chapters and prefetches next.
+5. **renderer** — Renders verse pages. Two display modes: Asterisks (hides text, shows `*` per syllable), English (ISO 15919 transliteration). Auto-detects Devanagari vs IAST text for prosody analysis.
 5. **animator** — Syllable-by-syllable animation engine. Highlights current syllable in gold, dims completed ones. Auto-advances pages and chapters.
 6. **ui** — UI controller. Binds controls, handles chapter selection, page navigation, keyboard shortcuts.
 
 ### Data Files
 
-- `data/chapter_01.json` through `data/chapter_18.json` — Per-chapter verse data (15-54 KB each)
-- Sourced from `https://sgsgitafoundation.org/assets/tutor_assets/bg/XX/tutor_chapter.json`
-- The raw tutor data has teacher/student repetitions (teacher=YW, student=NW). Our files are **deduplicated** — only unique verse lines are kept.
-- Each chapter JSON has: `name` (Sanskrit), `chapterNum`, `shloka[]` array
-- Each shloka has: `shlokaNum`, `entry[]` with `startTime`, `endTime`, `swhtsp` (line position marker), `shlNbr`, `sty` (style: fh=first header, th=title header, uh=closing header), `text` (Devanagari)
+- `data/chapter_01.json` through `data/chapter_18.json` — Per-chapter verse data with both Devanagari `text` and `iast` (ISO 15919) fields
+- `data/datta_stavam.json`, `data/sadguru_stavam.json`, `data/gita_mahatmyam.json`, `data/kshama_prarthana.json` — Additional prayer/chapter data (IAST only, no Devanagari)
+- IAST text uses ISO 15919 convention (ē/ō for long e/o)
+- Each chapter JSON has: `name`, `iastName`, `chapterNum`, `shloka[]` array
+- Each shloka has: `shlokaNum`, `entry[]` with `swhtsp` (line position marker), `sty` (style: fh=first header, th=title header, uh=closing header), `text`, `iast`
+
+### Chapter Order (in dropdown)
+
+Datta Stavam → Starting Prayers (Sadguru Stavam) → Gita Dhyana Shlokas → Chapters 1-18 → Gita Mahatmyam → Samarpana + Kshama Prarthana
 
 ## Controls
 
@@ -38,8 +43,8 @@ Single file: `index.html` containing all CSS, HTML, and JavaScript.
 - **Play/Pause**: Space bar or buttons
 - **Reset**: `R` key or button
 - **Prev/Next page**: Arrow keys or buttons. At chapter boundaries, navigates to adjacent chapters.
-- **Chapter selector**: Dropdown to jump to any chapter (0-18)
-- **Display modes**: Asterisk (default), IAST, Devanagari
+- **Chapter selector**: Dropdown to jump to any chapter (Datta Stavam through Kshama Prarthana)
+- **Display modes**: Asterisks (default), English (ISO 15919 transliteration)
 
 ## Keyboard Shortcuts
 

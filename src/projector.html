@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gita Pacer — Projector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Noto Sans Devanagari', 'Noto Sans', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      cursor: none;
+    }
+    #display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 3vh 4vw;
+      overflow: hidden;
+    }
+    #pace-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40vw;
+      opacity: 0.3;
+      display: none;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #countdown-overlay {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    #countdown-overlay .countdown-label {
+      font-size: 3vw;
+      color: #FFD700;
+      margin-bottom: 40px;
+    }
+    #countdown-overlay .countdown-number {
+      font-size: 12vw;
+      color: #fff;
+      font-weight: bold;
+    }
+    .verse-line {
+      font-size: clamp(14px, 2.2vw, 48px);
+      letter-spacing: 0.15em;
+      margin: 1.2em 0;
+      position: relative;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.5;
+      max-width: 95vw;
+      text-align: center;
+    }
+    .syllable {
+      display: inline-block;
+      position: relative;
+      transition: color 0.1s;
+    }
+    .syllable.active {
+      color: #FFD700;
+    }
+    .syllable.done {
+      color: #888;
+    }
+    .verse-marker {
+      display: inline-block;
+      margin-left: 0.3em;
+      color: #666;
+    }
+    #pointer {
+      position: absolute;
+      font-size: 36px;
+      transition: left 0.3s linear, top 0.15s ease-out;
+      z-index: 10;
+      pointer-events: none;
+      display: none;
+    }
+    #instruction-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      cursor: none;
+    }
+    #instruction-overlay .instruction-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    #instruction-overlay .instruction-image {
+      max-height: 50vh;
+      max-width: 70vw;
+      object-fit: contain;
+    }
+    #instruction-overlay .instruction-text {
+      color: #FFD700;
+      font-size: 8vw;
+      text-align: center;
+      padding: 20px 40px;
+      max-width: 90vw;
+      line-height: 1.3;
+    }
+    #instruction-overlay .instruction-dismiss {
+      color: #888;
+      font-size: 1.5vw;
+      margin-top: 40px;
+    }
+    @media (max-width: 900px) {
+      .verse-line { font-size: clamp(12px, 3vw, 36px); margin: 0.8em 0; letter-spacing: 0.1em; }
+      #display { padding: 2vh 3vw; }
+    }
+    @media (max-width: 600px) {
+      .verse-line { font-size: clamp(11px, 4vw, 28px); margin: 0.6em 0; letter-spacing: 0.05em; }
+    }
+    @media (min-width: 1600px) {
+      .verse-line { font-size: clamp(20px, 2.2vw, 56px); margin: 1.5em 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="instruction-overlay">
+    <div class="instruction-content"></div>
+  </div>
+
+  <div id="display">
+    <div id="pace-indicator"></div>
+    <div id="countdown-overlay">
+      <div class="countdown-label">Starting in</div>
+      <div class="countdown-number"></div>
+    </div>
+    <div id="pointer"></div>
+    <div id="verse-container-a"></div>
+    <div id="verse-container-b"></div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script src="projector.js"></script>
+</body>
+</html>

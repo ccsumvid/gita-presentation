@@ -43,9 +43,16 @@
     document.getElementById('chapter-name').textContent = chapterName;
 
     var page = dataLayer.getPage(currentPage);
-    var shlokaText = page && page.shlokaNum ? 'Shloka ' + page.shlokaNum : 'Page ' + (currentPage + 1);
     var total = dataLayer.getPageCount();
-    document.getElementById('shloka-info').textContent = shlokaText + ' (' + (currentPage + 1) + '/' + total + ')';
+    var shlokaText;
+    if (page && page.shlokaNum) {
+      shlokaText = 'Shloka ' + page.shlokaNum;
+    } else if (page && page.isHeader) {
+      shlokaText = 'Header';
+    } else {
+      shlokaText = 'Verse ' + (currentPage + 1);
+    }
+    document.getElementById('shloka-info').textContent = shlokaText + '  ·  ' + (currentPage + 1) + ' of ' + total;
   }
 
   // --- Shloka dropdown ---
@@ -161,9 +168,26 @@
   }
 
   // --- SPM display ---
+  var spmInput = document.getElementById('spm-input');
+
   function updateSpmDisplay() {
-    document.getElementById('spm-display').textContent = Math.round(animator.getState().bpm / 4);
+    spmInput.value = Math.round(animator.getState().bpm / 4);
   }
+
+  spmInput.addEventListener('change', function() {
+    var val = parseInt(spmInput.value, 10);
+    if (!isNaN(val) && val > 0) {
+      animator.setBpm(val * 4);
+    }
+    updateSpmDisplay();
+  });
+
+  spmInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      spmInput.blur();
+    }
+    e.stopPropagation(); // prevent keyboard shortcuts while editing
+  });
 
   // --- Hook into animator to send syllable updates to projector ---
   animator.setOnSyllableChange(function(index, state) {

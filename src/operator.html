@@ -65,7 +65,19 @@ body {
   text-align: center;
   min-width: 80px;
 }
-.spm-value .number { font-size: 22px; }
+.spm-value input[type="number"] {
+  font-size: 22px;
+  width: 70px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 2px;
+}
+.spm-value input[type="number"]:focus {
+  outline: 1px solid #5b9bd5;
+  border-radius: 4px;
+}
 .spm-value .label { color: #888; font-size: 11px; }
 
 /* Shared control styles */
@@ -142,7 +154,7 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
 <div class="spm-row">
   <button id="bpm-down">&minus;</button>
   <div class="spm-value">
-    <div class="number" id="spm-display">95</div>
+    <input type="number" id="spm-input" value="95" min="10" max="150">
     <div class="label">SPM</div>
   </div>
   <button id="bpm-up">+</button>

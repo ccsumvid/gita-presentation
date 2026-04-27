@@ -5,3 +5,6 @@ node_modules/
 *.pptx
 *.docx
 docs/superpowers/
+dist/
+firebase-debug.log
+.superpowers/

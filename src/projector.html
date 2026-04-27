@@ -25,16 +25,16 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      padding: 3vh 4vw;
+      padding: 15vh 4vw 3vh;
       overflow: hidden;
     }
     #pace-indicator {
       position: absolute;
-      top: 50%;
+      top: 2vh;
       left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 40vw;
-      opacity: 0.3;
+      transform: translateX(-50%);
+      font-size: 12vw;
+      opacity: 1;
       display: none;
       pointer-events: none;
       z-index: 1;
@@ -89,7 +89,7 @@
     #pointer {
       position: absolute;
       font-size: 36px;
-      transition: left 0.3s linear, top 0.15s ease-out;
+      transition: left 0.4s ease-in-out, top 0.2s ease-out;
       z-index: 10;
       pointer-events: none;
       display: none;
@@ -152,7 +152,7 @@
       <div class="countdown-label">Starting in</div>
       <div class="countdown-number"></div>
     </div>
-    <div id="pointer"></div>
+    <div id="pointer" style="display:none">&#128071;</div>
     <div id="verse-container-a"></div>
     <div id="verse-container-b"></div>
   </div>

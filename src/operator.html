@@ -10,35 +10,35 @@ body {
   background: #1a1a1a;
   color: #fff;
   font-family: 'Noto Sans', Arial, sans-serif;
-  font-size: 13px;
-  padding: 12px;
+  font-size: 15px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 /* Position bar */
 .position-bar {
   background: #000;
-  border-radius: 6px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 14px;
   text-align: center;
 }
 .position-bar .chapter-name {
   color: #FFD700;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: bold;
 }
 .position-bar .shloka-info {
   color: #aaa;
-  font-size: 11px;
+  font-size: 13px;
   margin-top: 4px;
 }
 
 /* Section labels */
 .section-label {
   color: #666;
-  font-size: 10px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 4px;
@@ -48,7 +48,7 @@ body {
 .transport {
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 /* SPM row */
@@ -56,17 +56,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 .spm-value {
   background: #000;
-  padding: 4px 12px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
   text-align: center;
-  min-width: 70px;
+  min-width: 80px;
 }
-.spm-value .number { font-size: 16px; }
-.spm-value .label { color: #888; font-size: 10px; }
+.spm-value .number { font-size: 22px; }
+.spm-value .label { color: #888; font-size: 11px; }
 
 /* Shared control styles */
 button, select, input {
@@ -74,43 +74,48 @@ button, select, input {
   color: #fff;
   border: 1px solid #555;
   font-family: 'Noto Sans', Arial, sans-serif;
-  font-size: 13px;
-  padding: 6px 12px;
-  border-radius: 6px;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
   outline: none;
 }
 button:hover { background: #444; border-color: #666; }
 button:active { transform: scale(0.95); }
-select { width: 100%; }
-input[type="number"] { width: 60px; text-align: center; }
+select { width: 100%; font-size: 14px; }
+input[type="number"] { width: 70px; text-align: center; }
 
 /* Play button */
-#btn-play { background: #1a7a2e; border-color: #2ecc40; }
+#btn-play { background: #1a7a2e; border-color: #2ecc40; font-size: 18px; }
 #btn-play:hover { background: #2ecc40; color: #000; }
 
 /* Pause button */
-#btn-pause { background: #a85a10; border-color: #ff851b; }
+#btn-pause { background: #a85a10; border-color: #ff851b; font-size: 18px; }
 #btn-pause:hover { background: #ff851b; color: #000; }
 
 /* Pace buttons */
-#btn-speedup { background: #005baa; border-color: #0074d9; }
+.pace-row { display: flex; gap: 8px; justify-content: center; }
+
+#btn-speedup { background: #005baa; border-color: #0074d9; flex: 1; }
 #btn-speedup:hover { background: #0074d9; }
 #btn-speedup.active { background: #0074d9; border-color: #3da2ff; box-shadow: 0 0 8px rgba(0,116,217,0.6); }
 
-#btn-slowdown { background: #7a0a8e; border-color: #b10dc9; }
+#btn-slowdown { background: #7a0a8e; border-color: #b10dc9; flex: 1; }
 #btn-slowdown:hover { background: #b10dc9; }
 #btn-slowdown.active { background: #b10dc9; border-color: #d44eec; box-shadow: 0 0 8px rgba(177,13,201,0.6); }
 
+#btn-clear-pace { flex: 0 0 auto; }
+
 /* Projector button */
-.projector-btn { width: 100%; background: #1a3a5c; border-color: #2a5a8c; color: #7ab8f5; }
+.projector-btn { width: 100%; background: #1a3a5c; border-color: #2a5a8c; color: #7ab8f5; font-size: 16px; padding: 12px; }
 .projector-btn:hover { background: #2a5a8c; }
 
 /* Divider */
 hr { border: none; border-top: 1px solid #333; margin: 0; }
 
 /* Mode buttons */
-.mode-row { display: flex; gap: 4px; justify-content: center; }
+.mode-row { display: flex; gap: 6px; justify-content: center; }
+.mode-btn { flex: 1; }
 .mode-btn.selected { background: #c94; color: #000; border-color: #c94; }
 </style>
 </head>
@@ -144,9 +149,10 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
 </div>
 
 <!-- Pace indicators -->
-<div class="transport">
-  <button id="btn-speedup" title="Speed Up signal">&#9889;</button>
-  <button id="btn-slowdown" title="Slow Down signal">&#9995;</button>
+<div class="section-label">Pace Signal</div>
+<div class="pace-row">
+  <button id="btn-speedup" title="Speed Up signal">&#9889; Speed Up</button>
+  <button id="btn-slowdown" title="Slow Down signal">&#9995; Slow Down</button>
   <button id="btn-clear-pace" title="Clear">&#10006;</button>
 </div>
 

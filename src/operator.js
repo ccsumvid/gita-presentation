@@ -132,13 +132,18 @@
   }
 
   // --- Countdown ---
+  var countdownActive = false;
+
   function startCountdown(callback) {
+    if (countdownActive) return;
+    countdownActive = true;
     var count = 5;
     sendToProjector('countdown', { number: count });
     var interval = setInterval(function() {
       count--;
       if (count <= 0) {
         clearInterval(interval);
+        countdownActive = false;
         sendToProjector('countdown', { number: 0 });
         if (callback) callback();
       } else {
@@ -161,33 +166,15 @@
   }
 
   // --- Hook into animator to send syllable updates to projector ---
-  // Override the animator's advance to also send IPC
-  var origPlay = animator.play;
-  var origPause = animator.pause;
-  var origReset = animator.reset;
-
-  // We patch via MutationObserver on the hidden display div
-  // When animator changes classes on syllable elements, we forward to projector
-  var displayEl = document.getElementById('display');
-  var syllableObserver = new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      if (m.type === 'attributes' && m.attributeName === 'class') {
-        var el = m.target;
-        if (el.classList.contains('syllable')) {
-          var elems = renderer.getSyllableElements();
-          var idx = Array.prototype.indexOf.call(elems, el);
-          if (idx >= 0) {
-            if (el.classList.contains('active')) {
-              sendToProjector('syllable-update', { index: idx, state: 'active' });
-            } else if (el.classList.contains('done')) {
-              sendToProjector('syllable-update', { index: idx, state: 'done' });
-            }
-          }
-        }
-      }
-    });
+  animator.setOnSyllableChange(function(index, state) {
+    sendToProjector('syllable-update', { index: index, state: state });
   });
-  syllableObserver.observe(displayEl, { subtree: true, attributes: true, attributeFilter: ['class'] });
+
+  // --- Auto-advance: when animator reaches end of page, go to next and resume ---
+  animator.setOnAutoAdvance(async function() {
+    await nextPage();
+    animator.play();
+  });
 
   // --- Pace indicators ---
   function setPace(mode) {
@@ -266,15 +253,17 @@
     var data = INSTRUCTION_DATA[key];
     if (data) {
       sendToProjector('show-instruction', data);
+      instructionShowing = true;
     }
     this.value = '';
   });
 
   // Dismiss instruction on click anywhere in operator (convenient)
+  var instructionShowing = false;
   document.addEventListener('click', function(e) {
-    // Only dismiss if instruction-select is not the target
-    if (e.target.id !== 'instruction-select') {
+    if (instructionShowing && e.target.id !== 'instruction-select') {
       sendToProjector('dismiss-instruction');
+      instructionShowing = false;
     }
   });
 
@@ -282,7 +271,6 @@
   var projectorBtn = document.getElementById('btn-projector');
   projectorBtn.addEventListener('click', function() {
     if (projectorOpen) {
-      sendToProjector('close-projector');
       window.electronAPI.send('close-projector');
     } else {
       window.electronAPI.send('open-projector');
@@ -325,7 +313,10 @@
       animator.setBpm(animator.getState().bpm - 20);
       updateSpmDisplay();
     } else if (e.code === 'Escape') {
-      sendToProjector('dismiss-instruction');
+      if (instructionShowing) {
+        sendToProjector('dismiss-instruction');
+        instructionShowing = false;
+      }
     }
   });
 

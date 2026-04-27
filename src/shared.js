@@ -816,6 +816,8 @@ const animator = (function() {
   let currentIndex = -1;
   let timeoutId = null;
   let bpm = 380; // internal beats; displayed as whole notes (bpm/4), default 95
+  let onSyllableChange = null; // callback: function(index, state) where state is 'active' or 'done'
+  let onAutoAdvance = null; // callback: called when animation reaches end of page
 
   const pointer = document.getElementById('pointer');
   const btnPlay = document.getElementById('btn-play');
@@ -866,6 +868,7 @@ const animator = (function() {
     if (currentIndex >= 0 && currentIndex < elems.length) {
       elems[currentIndex].classList.remove('active');
       elems[currentIndex].classList.add('done');
+      if (onSyllableChange) onSyllableChange(currentIndex, 'done');
     }
 
     currentIndex++;
@@ -876,11 +879,12 @@ const animator = (function() {
       btnPlay.style.display = '';
       btnPause.style.display = 'none';
       hidePointer();
-      // Auto-advance to next page instantly
-      timeoutId = setTimeout(async function() {
-        await ui.nextPage();
-        animator.play();
-      }, 0);
+      // Auto-advance to next page — notify via callback
+      if (onAutoAdvance) {
+        timeoutId = setTimeout(function() {
+          onAutoAdvance();
+        }, 0);
+      }
       return;
     }
 
@@ -896,6 +900,7 @@ const animator = (function() {
 
     // Activate current element
     el.classList.add('active');
+    if (onSyllableChange) onSyllableChange(currentIndex, 'active');
 
     const beats = parseInt(el.dataset.beats, 10) || 1;
     const durationMs = beats * getBeatMs();
@@ -912,9 +917,11 @@ const animator = (function() {
       timeoutId = setTimeout(function() {
         el.classList.remove('active');
         el.classList.add('done');
+        if (onSyllableChange) onSyllableChange(currentIndex, 'done');
         // Mark skipped dandas as done
         for (var i = currentIndex + 1; i < nextIdx; i++) {
           elems[i].classList.add('done');
+          if (onSyllableChange) onSyllableChange(i, 'done');
         }
         currentIndex = nextIdx - 1;
         if (nextIdx < elems.length) {
@@ -1003,6 +1010,8 @@ const animator = (function() {
     setBpm: setBpm,
     getState: getState,
     restore: restore,
-    getBeatMs: getBeatMs
+    getBeatMs: getBeatMs,
+    setOnSyllableChange: function(cb) { onSyllableChange = cb; },
+    setOnAutoAdvance: function(cb) { onAutoAdvance = cb; }
   };
 })();

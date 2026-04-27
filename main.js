@@ -5,10 +5,17 @@ let operatorWindow = null;
 let projectorWindow = null;
 
 function createOperatorWindow() {
+  var primaryDisplay = screen.getPrimaryDisplay();
+  var screenHeight = primaryDisplay.workAreaSize.height;
+  var screenWidth = primaryDisplay.workAreaSize.width;
+  var operatorWidth = Math.round(screenWidth / 3);
+
   operatorWindow = new BrowserWindow({
-    width: 320,
-    height: 500,
-    resizable: false,
+    width: operatorWidth,
+    height: screenHeight,
+    x: 0,
+    y: 0,
+    resizable: true,
     title: 'Gita Parayana — Operator',
     webPreferences: {
       preload: path.join(__dirname, 'src', 'preload.js'),

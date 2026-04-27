@@ -296,7 +296,6 @@ body {
   <div class="separator"></div>
   <select id="chapter-select">
     <option value="datta_stavam">Datta Stavam</option>
-    <option value="sadguru_stavam">Starting Prayers</option>
     <option value="0">gītā dhyāna ślōkāḥ</option>
     <option value="1">Ch 1 – arjunaviṣādayōgaḥ</option>
     <option value="2">Ch 2 – sāṅkhyayōgaḥ</option>
@@ -318,6 +317,9 @@ body {
     <option value="18">Ch 18 – mōkṣasannyāsayōgaḥ</option>
     <option value="gita_mahatmyam">Gita Mahatmyam</option>
     <option value="kshama_prarthana">Samarpana + Kshama Prarthana</option>
+    <option value="gita_saram">Gita Saram</option>
+    <option value="gita_arati">Gita Arati</option>
+    <option value="sadguru_stavam">Sadguru Stavam</option>
   </select>
   <button id="btn-play" title="Play">&#9654; Play</button>
   <button id="btn-pause" style="display:none" title="Pause">&#9208; Pause</button>
@@ -860,10 +862,10 @@ const dataLayer = (function() {
 
   // Ordered list of all chapter IDs
   const CHAPTER_ORDER = [
-    'datta_stavam', 'sadguru_stavam', '0',
+    'datta_stavam', '0',
     '1','2','3','4','5','6','7','8','9',
     '10','11','12','13','14','15','16','17','18',
-    'gita_mahatmyam', 'kshama_prarthana'
+    'gita_mahatmyam', 'kshama_prarthana', 'gita_saram', 'gita_arati', 'sadguru_stavam'
   ];
 
   let pages = [];

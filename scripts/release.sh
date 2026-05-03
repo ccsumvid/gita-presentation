@@ -31,18 +31,17 @@ npm run build
 
 # Collect assets
 DMG_ARM=$(find "${DIST}" -name "*.dmg" | grep "arm64" | head -1)
-DMG_X64=$(find "${DIST}" -name "*.dmg" | grep -v "arm64" | head -1)
+DMG_X64=$(find "${DIST}" -name "*.dmg" | grep "x64" | head -1)
 EXE=$(find "${DIST}" -name "*.exe" | head -1)
 
-ASSETS=()
-[ -n "${DMG_ARM}" ] && ASSETS+=("${DMG_ARM}")
-[ -n "${DMG_X64}" ] && ASSETS+=("${DMG_X64}")
-[ -n "${EXE}" ]     && ASSETS+=("${EXE}")
+# Fail if any required artifact is missing
+MISSING=0
+[ -z "${DMG_ARM}" ] && echo "ERROR: arm64 DMG not found in ${DIST}/" && MISSING=1
+[ -z "${DMG_X64}" ] && echo "ERROR: x64 (Intel) DMG not found in ${DIST}/" && MISSING=1
+[ -z "${EXE}" ]     && echo "ERROR: Windows EXE not found in ${DIST}/" && MISSING=1
+[ "${MISSING}" -eq 1 ] && exit 1
 
-if [ ${#ASSETS[@]} -eq 0 ]; then
-  echo "ERROR: No build artifacts found in ${DIST}/"
-  exit 1
-fi
+ASSETS=("${DMG_ARM}" "${DMG_X64}" "${EXE}")
 
 echo "==> Assets to upload:"
 for f in "${ASSETS[@]}"; do echo "    $f"; done

@@ -62,8 +62,34 @@ Datta Stavam → Starting Prayers (Sadguru Stavam) → Gita Dhyana Shlokas → C
 - `Gita-Parayana-HTML5-Viewer-Design.docx` — Original design spec
 - `Updated Parayana Instructions Final-resized on 7.17.25 - black background.pptx` — Reference PowerPoint with all chapter slides (black background, gold/white text)
 
+## Electron App
+
+The app runs as an Electron desktop app with two windows:
+- **Operator window** (`src/operator.html`) — controls, runs the animator
+- **Projector window** (`src/projector.html`) — fullscreen verse display, driven by IPC from operator
+- **Shared module** (`src/shared.js`) — prosody, dataLayer, renderer, animator (loaded by both windows)
+
+Run locally: `npm start`
+
+## Release Procedure (MANDATORY)
+
+Every release **must** include DMG (macOS) and EXE (Windows) assets attached to the GitHub release.
+
+### Steps
+1. Implement and verify changes locally (`npm start`)
+2. Bump version: `npm version X.Y.Z --no-git-tag-version`
+3. Commit: `git commit -am "feat: ... vX.Y.Z"`
+4. Push + tag: `git push && git tag vX.Y.Z && git push --tags`
+5. Create GitHub release: `gh release create vX.Y.Z --title "vX.Y.Z — ..." --notes "..."`
+6. **Build and attach assets**: `./scripts/release.sh X.Y.Z`
+
+### Release script
+`scripts/release.sh [version]` — builds macOS DMG (arm64 + x64) and Windows EXE via `electron-builder`, then uploads all artifacts to the existing GitHub release tag.
+
+Never publish a release without running `scripts/release.sh`. The DMG and EXE are required.
+
 ## Conventions
 
 - Black background, white/gold text throughout
-- No build tools, no dependencies, no npm — pure vanilla HTML/CSS/JS
+- No build tools, no dependencies, no npm — pure vanilla HTML/CSS/JS for web; Electron for desktop app
 - Keep the site lightweight: lazy-load chapters, don't bundle all data

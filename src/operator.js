@@ -198,9 +198,10 @@
 
     await nextPage();
 
-    // Stop auto-play at header pages — let operator navigate manually
+    // Pause briefly on header pages so they're visible before auto-advancing
     var newPage = dataLayer.getPage(currentPage);
     if (newPage && newPage.isHeader) {
+      setTimeout(function() { animator.play(); }, 3000);
       return;
     }
 

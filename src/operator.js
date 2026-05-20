@@ -24,7 +24,7 @@
 
   // --- Instruction data ---
   var INSTRUCTION_DATA = {
-    folded_hands:      { image: '../img/instructions/image9.gif' },
+    folded_hands:      { image: '../img/instructions/image7.gif' },
     pranam:            { text: 'Pran\u0101m', image: '../img/instructions/image7.gif' },
     sit_straight:      { text: 'Sit Straight', image: '../img/instructions/image3.gif' },
     increase_sruti:    { image: '../img/instructions/image4.jpeg', image2: '../img/instructions/image5.gif', arrow: 'up' },

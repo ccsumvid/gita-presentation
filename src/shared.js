@@ -527,8 +527,8 @@ const dataLayer = (function() {
     const result = [];
 
     for (const shloka of shlokas) {
-      const headerEntries = shloka.entry.filter(e => e.sty === 'fh' || e.sty === 'th' || e.sty === 'uh');
-      const regularEntries = shloka.entry.filter(e => e.sty !== 'fh' && e.sty !== 'th' && e.sty !== 'uh');
+      const headerEntries = shloka.entry.filter(e => e.sty === 'fh' || e.sty === 'sh' || e.sty === 'th' || e.sty === 'uh');
+      const regularEntries = shloka.entry.filter(e => e.sty !== 'fh' && e.sty !== 'sh' && e.sty !== 'th' && e.sty !== 'uh');
 
       for (const hdr of headerEntries) {
         result.push({
@@ -667,6 +667,9 @@ const renderer = (function() {
         if (line.sty === 'fh') {
           lineDiv.style.color = '#FFD700';
           lineDiv.style.fontSize = '3vw';
+        } else if (line.sty === 'sh') {
+          lineDiv.style.color = '#fff';
+          lineDiv.style.fontSize = '2.5vw';
         }
         target.appendChild(lineDiv);
         continue;

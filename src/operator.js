@@ -78,6 +78,7 @@
       renderer.invalidatePrefetch();
       await dataLayer.fetchChapter(chapterId);
       populateShlokaDropdown();
+      completedShlokaCount = 0;
       currentPage = 0;
       showPage(0);
       chapterSelect.value = String(chapterId);
@@ -122,20 +123,12 @@
     }
   }
 
-  function prevPage() {
-    if (currentPage > 0) {
-      showPage(currentPage - 1);
-    } else {
-      var prevId = dataLayer.getPrevChapterId();
-      if (prevId) {
-        dataLayer.fetchChapter(prevId).then(function() {
-          chapterSelect.value = prevId;
-          populateShlokaDropdown();
-          currentPage = dataLayer.getPageCount() - 1;
-          showPage(currentPage);
-        });
-      }
-    }
+  // --- Restart Chapter ---
+  var completedShlokaCount = 0;
+
+  function restartChapter() {
+    completedShlokaCount = 0;
+    showPage(0);
   }
 
   // --- Countdown ---
@@ -200,7 +193,21 @@
 
   // --- Auto-advance: when animator reaches end of page, go to next and resume ---
   animator.setOnAutoAdvance(async function() {
+    var completedPage = dataLayer.getPage(currentPage);
+    var isShloka = completedPage && !completedPage.isHeader && completedPage.shlokaNum && completedPage.shlokaNum !== '';
+
     await nextPage();
+
+    if (isShloka) {
+      completedShlokaCount++;
+      if (completedShlokaCount === 2) {
+        // After intro + 2 shlokas, automatically show folded hands
+        sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
+        instructionShowing = true;
+        return; // operator resumes playback after dismissing
+      }
+    }
+
     animator.play();
   });
 
@@ -229,7 +236,7 @@
     animator.reset();
     sendToProjector('animation-reset');
   });
-  document.getElementById('btn-prev').addEventListener('click', function() { prevPage(); });
+  document.getElementById('btn-restart-chapter').addEventListener('click', function() { restartChapter(); });
   document.getElementById('btn-next').addEventListener('click', function() { nextPage(); });
 
   chapterSelect.addEventListener('change', function() { loadChapter(chapterSelect.value); });
@@ -339,7 +346,7 @@
     } else if (e.code === 'ArrowRight') {
       nextPage();
     } else if (e.code === 'ArrowLeft') {
-      prevPage();
+      restartChapter();
     } else if (e.code === 'KeyR') {
       animator.reset();
       sendToProjector('animation-reset');

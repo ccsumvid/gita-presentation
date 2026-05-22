@@ -7,20 +7,11 @@
       "shlokaNum": "",
       "entry": [
         {
-          "startTime": "0.914286",
-          "endTime": "6.25673",
-          "swhtsp": "l",
-          "shlNbr": "00",
-          "sty": "fh",
-          "text": "ओं  श्री  परमात्मने नमः",
-          "iast": "ōṃ  śrī  paramātmanē namaḥ"
-        },
-        {
           "startTime": "0",
           "endTime": "0",
           "swhtsp": "l",
           "shlNbr": "00",
-          "sty": "sh",
+          "sty": "fh",
           "text": "अथ  श्रीमद्भगवद्गीता",
           "iast": "atha  śrīmadbhagavadgītā"
         },

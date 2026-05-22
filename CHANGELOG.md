@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.1] - 2026-05-21
+
+### Fixed
+- Pause button is now always visible as its own distinct control alongside Play — no longer toggling visibility; Play dims when playing, Pause dims when paused (#11)
+- Chapter 1 intro now correctly begins with "Atha Srimad Bhagavad Gita" (not "Om Sri Paramatmane Namah") as the golden first-header, matching the traditional recitation sequence (#12)
+
 ## [0.7.0] - 2026-05-19
 
 ### Added

@@ -94,6 +94,7 @@ button, select, input {
 }
 button:hover { background: #444; border-color: #666; }
 button:active { transform: scale(0.95); }
+button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; pointer-events: none; }
 select { width: 100%; font-size: 14px; }
 input[type="number"] { width: 70px; text-align: center; }
 
@@ -148,7 +149,7 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
 <div class="section-label">Transport</div>
 <div class="transport">
   <button id="btn-play" title="Play">&#9654;</button>
-  <button id="btn-pause" style="display:none" title="Pause">&#9646;&#9646;</button>
+  <button id="btn-pause" title="Pause" disabled>&#9646;&#9646;</button>
   <button id="btn-reset" title="Reset">&#8634;</button>
   <button id="btn-restart-chapter" title="Restart Chapter">&#8635; Restart</button>
   <button id="btn-next" title="Next page">&#9654;</button>

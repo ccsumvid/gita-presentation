@@ -836,8 +836,8 @@ const animator = (function() {
 
   function play() {
     isPlaying = true;
-    btnPlay.style.display = 'none';
-    btnPause.style.display = '';
+    if (btnPlay) btnPlay.disabled = true;
+    if (btnPause) btnPause.disabled = false;
     advance();
   }
 
@@ -847,8 +847,8 @@ const animator = (function() {
       clearTimeout(timeoutId);
       timeoutId = null;
     }
-    btnPlay.style.display = '';
-    btnPause.style.display = 'none';
+    if (btnPlay) btnPlay.disabled = false;
+    if (btnPause) btnPause.disabled = true;
   }
 
   function reset() {
@@ -879,8 +879,8 @@ const animator = (function() {
     // Past end — auto-advance to next page if available, otherwise stop
     if (currentIndex >= elems.length) {
       isPlaying = false;
-      btnPlay.style.display = '';
-      btnPause.style.display = 'none';
+      if (btnPlay) btnPlay.disabled = false;
+      if (btnPause) btnPause.disabled = true;
       hidePointer();
       // Auto-advance to next page — notify via callback
       if (onAutoAdvance) {
@@ -996,8 +996,8 @@ const animator = (function() {
     // Resume playing if it was playing
     if (state.isPlaying && currentIndex >= 0) {
       isPlaying = true;
-      btnPlay.style.display = 'none';
-      btnPause.style.display = '';
+      if (btnPlay) btnPlay.disabled = true;
+      if (btnPause) btnPause.disabled = false;
       const beats = parseInt(elems[currentIndex].dataset.beats, 10) || 1;
       const lineEndPause = elems[currentIndex].dataset.lineEnd ? 1 : 0;
       timeoutId = setTimeout(advance, (beats + lineEndPause) * getBeatMs());

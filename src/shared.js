@@ -689,7 +689,7 @@ const renderer = (function() {
               span.textContent = '✱';
               if (token.wordEnd) {
                 lineDiv.appendChild(span);
-                lineDiv.appendChild(document.createTextNode(' '));
+                lineDiv.appendChild(document.createTextNode(' '));
                 continue;
               }
             }
@@ -738,9 +738,9 @@ const renderer = (function() {
           lineDiv.appendChild(span1);
           target.appendChild(lineDiv);
 
-          // Second half — new lineDiv
+          // Second half — tighter top margin shows it belongs to the same pada
           const lineDiv2 = document.createElement('div');
-          lineDiv2.className = 'verse-line';
+          lineDiv2.className = 'verse-line verse-line-continuation';
           const span2 = document.createElement('span');
           span2.className = 'syllable';
           span2.dataset.index = elements.length;

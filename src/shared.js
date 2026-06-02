@@ -660,16 +660,41 @@ const renderer = (function() {
       lineDiv.className = 'verse-line';
 
       if (pageData.isHeader) {
-        // Headers: always show IAST text (or fall back to text field)
-        const displayText = line.iast || line.text;
-        const textNode = document.createTextNode(displayText);
-        lineDiv.appendChild(textNode);
         if (line.sty === 'fh') {
           lineDiv.style.color = '#FFD700';
           lineDiv.style.fontSize = '3vw';
         } else if (line.sty === 'sh') {
           lineDiv.style.color = '#fff';
           lineDiv.style.fontSize = '2.5vw';
+        }
+        if (currentMode !== 'asterisk') {
+          // English mode: show IAST text (or fall back to text field)
+          const displayText = line.iast || line.text;
+          const textNode = document.createTextNode(displayText);
+          lineDiv.appendChild(textNode);
+        } else {
+          // Asterisk mode: show ✱ per syllable using appropriate prosody engine
+          const hasDevanagari = /[ऀ-ॿ]/.test(line.text);
+          const analyzer = hasDevanagari ? prosody : iastProsody;
+          const analyzeText = hasDevanagari ? line.text : (line.iast || line.text);
+          const tokens = analyzer.analyzeLine(analyzeText);
+          for (let ti = 0; ti < tokens.length; ti++) {
+            const token = tokens[ti];
+            const span = document.createElement('span');
+            if (token.isMarker) {
+              span.className = 'verse-marker';
+              span.textContent = token.text;
+            } else {
+              span.className = 'syllable';
+              span.textContent = '✱';
+              if (token.wordEnd) {
+                lineDiv.appendChild(span);
+                lineDiv.appendChild(document.createTextNode(' '));
+                continue;
+              }
+            }
+            lineDiv.appendChild(span);
+          }
         }
         target.appendChild(lineDiv);
         continue;
@@ -688,13 +713,53 @@ const renderer = (function() {
         const displayText = line.iast || line.text;
         const tokens = analyzer.analyzeLine(analyzeText);
         const totalBeats = tokens.reduce((sum, t) => sum + t.beats, 0);
-        const span = document.createElement('span');
-        span.className = 'syllable';
-        span.dataset.index = elements.length;
-        span.dataset.beats = totalBeats;
-        span.textContent = displayText;
-        elements.push(span);
-        lineDiv.appendChild(span);
+
+        if (displayText.length > 40) {
+          // Split at the space nearest to the midpoint for long lines
+          const mid = Math.floor(displayText.length / 2);
+          let splitIdx = displayText.lastIndexOf(' ', mid);
+          if (splitIdx < 0) splitIdx = displayText.indexOf(' ', mid);
+          if (splitIdx < 0) splitIdx = mid;
+
+          const firstHalf = displayText.slice(0, splitIdx).trim();
+          const secondHalf = displayText.slice(splitIdx).trim();
+          const ratio = splitIdx / displayText.length;
+          const firstBeats = Math.max(1, Math.round(totalBeats * ratio));
+          const secondBeats = Math.max(1, totalBeats - firstBeats);
+
+          // First half
+          const span1 = document.createElement('span');
+          span1.className = 'syllable';
+          span1.dataset.index = elements.length;
+          span1.dataset.beats = firstBeats;
+          span1.dataset.lineEnd = '1';
+          span1.textContent = firstHalf;
+          elements.push(span1);
+          lineDiv.appendChild(span1);
+          target.appendChild(lineDiv);
+
+          // Second half — new lineDiv
+          const lineDiv2 = document.createElement('div');
+          lineDiv2.className = 'verse-line';
+          const span2 = document.createElement('span');
+          span2.className = 'syllable';
+          span2.dataset.index = elements.length;
+          span2.dataset.beats = secondBeats;
+          span2.dataset.lineEnd = '1';
+          span2.textContent = secondHalf;
+          elements.push(span2);
+          lineDiv2.appendChild(span2);
+          target.appendChild(lineDiv2);
+          continue;
+        } else {
+          const span = document.createElement('span');
+          span.className = 'syllable';
+          span.dataset.index = elements.length;
+          span.dataset.beats = totalBeats;
+          span.textContent = displayText;
+          elements.push(span);
+          lineDiv.appendChild(span);
+        }
       } else {
         // Asterisk mode: show * per syllable using appropriate prosody engine
         const tokens = analyzer.analyzeLine(analyzeText);

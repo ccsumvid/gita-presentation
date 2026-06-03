@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.6] - 2026-06-03
+
+### Fixed
+- Reduced verse line spacing so all 8 lines of a long-chandas shloka fit on screen — margin reduced from 1.2em (1.5em at 1600px+) to 0.6em across all breakpoints. Verified: 8 lines occupy 693px within a 731px display area on a standard 1280px viewport.
+
 ## [0.8.5] - 2026-06-03
 
 ### Added

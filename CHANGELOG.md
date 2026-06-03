@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.2] - 2026-06-02
+
+### Added
+- BG 18.66 (sarvadharmān parityajya…) repeats 3 times in its natural position in Chapter 18
+- BG 18.78 (yatra yōgēśvaraḥ kṛṣṇaḥ…), the final verse of Chapter 18, repeats 3 times before the closing colophon
+
 ## [0.8.1] - 2026-06-02
 
 ### Fixed

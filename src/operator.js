@@ -191,10 +191,17 @@
   animator.setOnAutoAdvance(async function() {
     await nextPage();
 
-    // Pause briefly on header pages so they're visible before auto-advancing
+    // Pause briefly on header pages — show folded hands, then auto-advance
     var newPage = dataLayer.getPage(currentPage);
     if (newPage && newPage.isHeader) {
-      setTimeout(function() { animator.play(); }, 3000);
+      sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
+      instructionShowing = true;
+      setTimeout(function() {
+        sendToProjector('dismiss-instruction');
+        instructionShowing = false;
+        document.getElementById('instruction-select').value = '';
+        animator.play();
+      }, 3000);
       return;
     }
 

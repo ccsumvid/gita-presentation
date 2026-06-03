@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.4] - 2026-06-03
+
+### Fixed
+- Asterisk mode: long-chandas padas now split into two evenly balanced lines at the exact syllable midpoint — 11 syllables gives 5+6, 12 gives 6+6, 19 gives 9+10. Previously long-chandas padas showed as one unbroken line of asterisks.
+- English mode: line split now uses syllable-count word boundaries instead of character-count midpoint, giving more natural splits aligned to the meter.
+
 ## [0.8.3] - 2026-06-03
 
 ### Fixed

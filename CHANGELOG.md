@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.7] - 2026-06-03
+
+### Fixed
+- Pointer animation is now smooth and predictable in asterisk mode:
+  - **Ahead-prediction model**: pointer snaps to the current syllable center, then immediately glides toward the next syllable on the same line over the full syllable duration — so it arrives exactly when the next syllable activates.
+  - **Clean line transitions**: at the end of each line the pointer glides to the right edge of the last syllable, then snaps cleanly to the start of the next line with no horizontal carry-over.
+  - **No cross-line jumps**: previously the pointer carried over from the right side of line N to the left side of line N+1, creating a jarring right-to-left motion. Now every new line starts from a snap at the first syllable's center.
+  - **English mode unchanged**: left-edge snap → right-edge sweep per line (already correct).
+
 ## [0.8.6] - 2026-06-03
 
 ### Fixed

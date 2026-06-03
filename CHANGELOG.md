@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.5] - 2026-06-03
+
+### Added
+- Invocation Prayers (āvāhana ślōkāḥ) added as a new chapter between Datta Stavam and Dhyana Shlokas, containing the Guru Parampara shloka, Ganapati shloka, Guru Brahma shloka, and closing mantra (closes #15)
+
+### Changed
+- Left-aligned verse text within a centered panel; continuation lines (even rows in 8-line long-chandas display) staggered 20% from the left
+- Chapter header/intro pages now automatically show the folded-hands image during the 3-second pause, signalling chanters to do namaskara
+
 ## [0.8.4] - 2026-06-03
 
 ### Fixed

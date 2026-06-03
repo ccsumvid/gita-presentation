@@ -66,6 +66,12 @@
       color: #FFD700;
       letter-spacing: 0.1em;
     }
+    #verse-container-a, #verse-container-b {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 55vw;
+    }
     .verse-line {
       font-size: clamp(14px, 2.2vw, 48px);
       letter-spacing: 0.15em;
@@ -75,11 +81,12 @@
       word-break: break-word;
       line-height: 1.5;
       max-width: 95vw;
-      text-align: center;
+      text-align: left;
     }
-    /* Second half of a split long-chandas line — tighter gap shows it belongs to the same pada */
+    /* Second half of a split long-chandas line — tighter gap + 20% stagger */
     .verse-line-continuation {
       margin-top: 0.25em;
+      padding-left: 20%;
     }
     .syllable {
       display: inline-block;

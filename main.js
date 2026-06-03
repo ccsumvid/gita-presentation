@@ -1,6 +1,11 @@
 const { app, BrowserWindow, ipcMain, screen, dialog, shell } = require('electron');
 const path = require('path');
 
+// Prevent multiple instances — ensures the NSIS installer can always close the running app
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+}
+
 const GITHUB_REPO = 'ccsumvid/gita-presentation';
 
 async function checkForUpdates() {

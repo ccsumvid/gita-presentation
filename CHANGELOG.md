@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.1] - 2026-06-02
+
+### Fixed
+- Windows installer no longer shows "cannot be closed" error on reinstall/upgrade — added single-instance lock so the NSIS installer can always terminate a running instance cleanly
+
 ## [0.8.0] - 2026-06-02
 
 ### Added

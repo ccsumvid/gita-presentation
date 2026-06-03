@@ -33,7 +33,7 @@ npm run build
 DMG_ARM=$(find "${DIST}" -name "*.dmg" | grep "arm64" | head -1)
 # electron-builder names the x64 DMG without an arch suffix
 DMG_X64=$(find "${DIST}" -name "*.dmg" | grep -v "arm64" | head -1)
-EXE=$(find "${DIST}" -name "*.exe" | head -1)
+EXE=$(find "${DIST}" -maxdepth 1 -name "*Setup*.exe" | head -1)
 
 # Fail if any required artifact is missing
 MISSING=0

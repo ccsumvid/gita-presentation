@@ -202,22 +202,26 @@
 
   // --- Auto-advance: when animator reaches end of page, go to next and resume ---
   animator.setOnAutoAdvance(async function() {
-    await nextPage();
+    // Check if we're LEAVING a header page (headers have no animatable elements,
+    // so advance() fires instantly — we must pause here so the header stays visible)
+    var prevPage = dataLayer.getPage(currentPage);
+    var leavingHeader = prevPage && prevPage.isHeader;
 
-    // Pause briefly on header pages — show folded hands, then auto-advance
-    var newPage = dataLayer.getPage(currentPage);
-    if (newPage && newPage.isHeader) {
+    if (leavingHeader) {
+      // Header still on the projector — show folded hands for 3s, then load verse 1
       sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
       instructionShowing = true;
-      setTimeout(function() {
+      setTimeout(async function() {
         sendToProjector('dismiss-instruction');
         instructionShowing = false;
         document.getElementById('instruction-select').value = '';
+        await nextPage();
         animator.play();
       }, 3000);
       return;
     }
 
+    await nextPage();
     animator.play();
   });
 

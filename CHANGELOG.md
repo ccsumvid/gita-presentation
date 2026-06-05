@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.8] - 2026-06-05
+
+### Added
+- App icon: Gita Pacer logo (lotus/flame/speedometer, by SGS Gita Foundation)
+
+### Fixed
+- Chapter header ("ōṃ śrī paramātmanē namaḥ…") now correctly appears AFTER the countdown: projector blanks when chapter loads, page pre-renders during countdown, header appears the instant the overlay lifts
+- Header page stays visible for 3 seconds with folded-hands cue before verse 1 begins (works for both initial play and mid-session chapter transitions)
+- Last line of invocation prayers shlokas now respects BPM: root cause was Unicode dandas (॥ U+0965) not recognized by prosody engine — normalized to ASCII || so | = 2-beat pause, || = 4-beat pause
+- Mid-pada split (continuation lines in long-chandas) flows without an extra beat pause, keeping pointer in rhythmic sync
+
 ## [0.8.7] - 2026-06-03
 
 ### Fixed

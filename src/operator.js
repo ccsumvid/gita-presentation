@@ -73,13 +73,15 @@
   }
 
   // --- Chapter loading ---
-  async function loadChapter(chapterId) {
+  // blankProjector=true: for manual chapter selection — blank the projector so the header
+  // only appears after the countdown. blankProjector=false: for auto-advance — show immediately.
+  async function loadChapter(chapterId, blankProjector) {
     try {
       renderer.invalidatePrefetch();
       await dataLayer.fetchChapter(chapterId);
       populateShlokaDropdown();
       currentPage = 0;
-      showPage(0);
+      showPage(0, blankProjector);
       chapterSelect.value = String(chapterId);
     } catch (err) {
       console.error('Load failed:', err);
@@ -87,7 +89,7 @@
   }
 
   // --- Page display ---
-  function showPage(index) {
+  function showPage(index, blankProjector) {
     animator.reset();
     sendToProjector('animation-reset');
 
@@ -101,7 +103,13 @@
     currentPage = index;
     updatePositionBar();
     shlokaSelect.value = currentPage;
-    syncProjectorPage();
+
+    if (blankProjector) {
+      // Blank the projector now — header will appear after countdown
+      sendToProjector('countdown', { number: -1 });
+    } else {
+      syncProjectorPage();
+    }
 
     // Pre-render next page
     var nextIdx = currentPage + 1;
@@ -117,7 +125,7 @@
     } else {
       var nextId = dataLayer.getNextChapterId();
       if (nextId) {
-        await loadChapter(nextId);
+        await loadChapter(nextId, false); // auto-advance: show immediately
       }
     }
   }
@@ -150,10 +158,10 @@
 
   function playWithCountdown() {
     if (currentPage === 0 && animator.getState().currentIndex < 0) {
-      // Blank the projector before countdown so chapter header only appears after
-      sendToProjector('countdown', { number: -1 });
+      // Pre-render the page to the projector NOW (it renders behind the blank overlay)
+      // so it appears the instant the countdown overlay lifts — no flash of previous content
+      syncProjectorPage();
       startCountdown(function() {
-        syncProjectorPage(); // show page fresh after countdown
         animator.play();
       });
     } else {
@@ -241,7 +249,7 @@
   document.getElementById('btn-restart-chapter').addEventListener('click', function() { restartChapter(); });
   document.getElementById('btn-next').addEventListener('click', function() { nextPage(); });
 
-  chapterSelect.addEventListener('change', function() { loadChapter(chapterSelect.value); });
+  chapterSelect.addEventListener('change', function() { loadChapter(chapterSelect.value, true); });
   shlokaSelect.addEventListener('change', function() {
     var pageIndex = parseInt(shlokaSelect.value, 10);
     if (!isNaN(pageIndex) && pageIndex >= 0 && pageIndex < dataLayer.getPageCount()) {
@@ -368,5 +376,5 @@
   });
 
   // --- Init ---
-  loadChapter('datta_stavam');
+  loadChapter('datta_stavam', true); // start with blank projector until Play
 })();

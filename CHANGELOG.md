@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0] - 2026-06-05
+
+### Fixed
+- **Countdown on first launch**: projector window now correctly shows blank screen on first open — previously the `projector-status` connection event was overwriting the blank before the countdown could run
+- **Uvaca lines on same slide**: speaker labels ("sañjaya uvāca", "arjuna uvāca", "śrī bhagavānuvāca") now appear on the same slide as the verse they introduce in all affected chapters (2, 4, 5, 7, 8, 9, 12, 16, ch18 shloka 2)
+- **Chapter 8 colophon on single slide**: "ōṃ tatsaditi śrīmad…" closing text was split across 8 separate slides — now grouped as one page (the entries had incorrect `sty=th/uh` tags instead of empty)
+- **Pranam mudra for colophon and Sarvadharman**: Pranam cue now shows when transitioning through "Om Tatsaditi" colophon and Sarvadharman shloka, not just at chapter headers
+
 ## [0.8.9] - 2026-06-05
 
 ### Fixed

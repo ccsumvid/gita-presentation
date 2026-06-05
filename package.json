@@ -1,6 +1,6 @@
 {
   "name": "gita-pacer",
-  "version": "0.8.9",
+  "version": "0.9.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

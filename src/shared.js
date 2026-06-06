@@ -9,6 +9,7 @@
 const EMBEDDED_DHYANA = {
   "name": "गीता  ध्यान  श्लोकाः",
   "chapterNum": "00",
+  "defaultBpm": 280,
   "shloka": [
     {
       "shlokaNum": "",
@@ -594,7 +595,7 @@ const dataLayer = (function() {
       prefetch(CHAPTER_ORDER[idx + 1]);
     }
 
-    return { name: chapterName, pageCount: pages.length };
+    return { name: chapterName, pageCount: pages.length, defaultBpm: data.defaultBpm || null };
   }
 
   function getPage(index) {
@@ -708,10 +709,10 @@ const renderer = (function() {
           }
         }
 
-        // Mark lineEnd on last non-marker element of this header line
+        // Header lines use splitEnd (no inter-line pause) — the page itself ends naturally
         for (let i = elements.length - 1; i >= hLineStart; i--) {
           if (!elements[i].classList.contains('verse-marker')) {
-            elements[i].dataset.lineEnd = '1';
+            elements[i].dataset.splitEnd = '1';
             break;
           }
         }

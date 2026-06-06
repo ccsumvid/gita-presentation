@@ -78,7 +78,12 @@
   async function loadChapter(chapterId, blankProjector) {
     try {
       renderer.invalidatePrefetch();
-      await dataLayer.fetchChapter(chapterId);
+      var chData = await dataLayer.fetchChapter(chapterId);
+      // Apply chapter-specific default BPM if defined (e.g. Dhyana Shlokas)
+      if (chData && chData.defaultBpm) {
+        animator.setBpm(chData.defaultBpm);
+        updateSpmDisplay();
+      }
       populateShlokaDropdown();
       currentPage = 0;
       showPage(0, blankProjector);
@@ -158,8 +163,8 @@
 
   function playWithCountdown() {
     if (currentPage === 0 && animator.getState().currentIndex < 0) {
-      // Pre-render the page to the projector NOW (it renders behind the blank overlay)
-      // so it appears the instant the countdown overlay lifts — no flash of previous content
+      // Blank projector, pre-render behind the blank, then countdown
+      sendToProjector('countdown', { number: -1 });
       syncProjectorPage();
       startCountdown(function() {
         animator.play();
@@ -202,14 +207,12 @@
 
   // --- Auto-advance: when animator reaches end of page, go to next and resume ---
   animator.setOnAutoAdvance(async function() {
-    // Check if we're LEAVING a header page (headers have no animatable elements,
-    // so advance() fires instantly — we must pause here so the header stays visible)
     var prevPage = dataLayer.getPage(currentPage);
     var leavingHeader = prevPage && prevPage.isHeader;
-    var leavingColophonOrSarva = prevPage && (prevPage.shlokaNum === '' || prevPage.shlokaNum === 'sarvadharmān');
 
     if (leavingHeader) {
-      // Header still on the projector — show Pranam mudra for 3s, then load verse 1
+      // Header just finished animating — show Pranam for 3s while header is still visible,
+      // then advance to verse 1
       sendToProjector('show-instruction', INSTRUCTION_DATA['pranam']);
       instructionShowing = true;
       setTimeout(async function() {
@@ -219,20 +222,6 @@
         await nextPage();
         animator.play();
       }, 3000);
-      return;
-    }
-
-    if (leavingColophonOrSarva) {
-      // Show Pranam briefly as we transition through colophon/sarvadharman
-      sendToProjector('show-instruction', INSTRUCTION_DATA['pranam']);
-      instructionShowing = true;
-      await nextPage();
-      setTimeout(function() {
-        sendToProjector('dismiss-instruction');
-        instructionShowing = false;
-        document.getElementById('instruction-select').value = '';
-        animator.play();
-      }, 2000);
       return;
     }
 

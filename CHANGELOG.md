@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.1] - 2026-06-05
+
+### Fixed
+- Pointer now animates across all header lines (chapter title, intro text) in both asterisk and English mode — the pointer sweeps left→right across each header line exactly as it does for verse lines
+
 ## [0.9.0] - 2026-06-05
 
 ### Fixed

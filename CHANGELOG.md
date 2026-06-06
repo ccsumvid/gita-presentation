@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.2] - 2026-06-06
+
+### Fixed
+- Dhyana Shlokas now defaults to 70 SPM (slower pace) when selected; other chapters keep their current SPM
+- Header lines (chapter title, intro text) now animate without pauses between them — pointer sweeps continuously from one line to the next
+- Pressing Play after a restart now always blanks the projector before the countdown, so the header only appears after countdown ends
+- Removed the 2-second pause between "ōṃ tatsaditi…" colophon and "sarvadharmān…" — they now flow directly
+
 ## [0.9.1] - 2026-06-05
 
 ### Fixed

@@ -45,12 +45,14 @@
     var page = dataLayer.getPage(currentPage);
     var total = dataLayer.getPageCount();
     var shlokaText;
-    if (page && page.shlokaNum) {
-      shlokaText = 'Shloka ' + page.shlokaNum;
-    } else if (page && page.isHeader) {
+    if (page && page.isHeader) {
       shlokaText = 'Header';
+    } else if (page && page.isCloser) {
+      shlokaText = 'Closing';
+    } else if (page && page.shlokaNum) {
+      shlokaText = 'Shloka ' + page.shlokaNum;
     } else {
-      shlokaText = 'Verse ' + (currentPage + 1);
+      shlokaText = 'Page ' + (currentPage + 1);
     }
     document.getElementById('shloka-info').textContent = shlokaText + '  ·  ' + (currentPage + 1) + ' of ' + total;
   }
@@ -65,6 +67,8 @@
       opt.value = i;
       if (page.isHeader) {
         opt.textContent = page.shlokaNum ? 'Header (Shloka ' + page.shlokaNum + ')' : 'Header';
+      } else if (page.isCloser) {
+        opt.textContent = 'Closing';
       } else {
         opt.textContent = page.shlokaNum ? 'Shloka ' + page.shlokaNum : 'Page ' + (i + 1);
       }

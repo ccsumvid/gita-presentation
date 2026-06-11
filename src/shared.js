@@ -540,11 +540,16 @@ const dataLayer = (function() {
       }
 
       if (regularEntries.length > 0) {
-        result.push({
+        const page = {
           shlokaNum: shloka.shlokaNum,
           lines: regularEntries.map(e => ({ text: e.text, iast: e.iast || '', swhtsp: e.swhtsp, sty: e.sty })),
           isHeader: false
-        });
+        };
+        // Colophon ("|| ōṃ tatsaditi ...") — leading || distinguishes it from
+        // verse 17.23, which also begins with "ōṃ tatsaditi".
+        const first = (page.lines[0].iast || page.lines[0].text || '');
+        page.isCloser = /^\s*\|\|.*tatsaditi/.test(first) || /^\s*\|\|.*तत्सदिति/.test(first);
+        result.push(page);
       }
     }
 

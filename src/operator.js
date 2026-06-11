@@ -25,6 +25,7 @@
   // --- Instruction data ---
   var INSTRUCTION_DATA = {
     folded_hands:      { image: '../img/instructions/folded-hands.png' },
+    namaskara_anim:    { image: '../img/instructions/image9.gif' },
     pranam:            { text: 'Pran\u0101m', image: '../img/instructions/image7.gif' },
     sit_straight:      { text: 'Sit Straight', image: '../img/instructions/image3.gif' },
     increase_sruti:    { image: '../img/instructions/shruti-increase.png' },
@@ -120,10 +121,17 @@
       syncProjectorPage();
     }
 
-    // Feedback #6: namaskara mudra while header lines animate; auto-dismissed on verse pages.
+    // Feedback #6 + #7: namaskara mudra while header lines animate, on the colophon
+    // ("|| ōṃ tatsaditi ...") page, on each chapter's trailing sarvadharmān recitation,
+    // and on 18.66 / 18.78. Auto-dismissed on other pages.
     // Only auto-shown cards are auto-dismissed — manual instructions survive page flips.
-    if (page && page.isHeader) {
-      sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
+    var needsMudra = page && (page.isHeader || page.isCloser ||
+      page.shlokaNum === 'sarvadharmān' ||
+      (chId === '18' && (page.shlokaNum === '66' || page.shlokaNum === '78')));
+    if (needsMudra) {
+      // Feedback #20: chapter 1 opens with the crisscrossed-fingers animation.
+      var mudraKey = (chId === '1' && page.isHeader) ? 'namaskara_anim' : 'folded_hands';
+      sendToProjector('show-instruction', INSTRUCTION_DATA[mudraKey]);
       instructionShowing = true;
       headerInstructionShowing = true;
     } else if (headerInstructionShowing) {

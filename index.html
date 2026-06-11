@@ -295,8 +295,7 @@ body {
   padding: 0;
 }
 #instruction-overlay.corner .instruction-dismiss {
-  font-size: clamp(10px, 1.2vw, 16px);
-  margin-top: 4px;
+  display: none; /* "Click anywhere to dismiss" only applies to the full-screen overlay */
 }
 </style>
 </head>
@@ -1508,11 +1507,11 @@ const ui = (function() {
   function showPage(index) {
     animator.reset();
     const chId = dataLayer.getCurrentChapterId();
+    const page = dataLayer.getPage(index);
 
     // Try swapping in the pre-rendered buffer (instant, no DOM rebuild)
     if (!renderer.swapPrefetched(index, chId)) {
       // Fallback: render directly
-      const page = dataLayer.getPage(index);
       if (!page) return;
       renderer.renderPage(page);
     }
@@ -1521,12 +1520,12 @@ const ui = (function() {
     updatePageInfo();
     syncShlokaDropdown();
 
-    // Feedback #6: namaskara mudra (corner card) while header lines animate; dismissed on verse pages.
-    const pageData = dataLayer.getPage(index);
-    const instructionOverlay = document.getElementById('instruction-overlay');
-    if (pageData && pageData.isHeader) {
+    // Feedback #6: namaskara mudra (corner card) while header lines animate; auto-dismissed
+    // on verse pages. Only auto-shown cards are auto-dismissed — manual instructions survive.
+    if (page && page.isHeader) {
       showInstruction('folded_hands', { corner: true });
-    } else if (instructionOverlay.style.display === 'flex') {
+      headerInstructionShowing = true;
+    } else if (headerInstructionShowing) {
       dismissInstruction();
     }
 
@@ -1588,8 +1587,10 @@ const ui = (function() {
     var chapterId = dataLayer.getCurrentChapterId();
 
     if (atChapterEnd) {
-      // Namaskara mudra at every chapter end (mirrors the operator app).
+      // Namaskara mudra at every chapter end (mirrors the operator app). Auto-shown —
+      // may be auto-dismissed by the gap timer or the next chapter's verse pages.
       showInstruction('folded_hands');
+      headerInstructionShowing = true;
 
       // Hard stop after Datta Stavam — resume manually (click overlay to dismiss).
       if (chapterId === 'datta_stavam') return;
@@ -1806,6 +1807,10 @@ var INSTRUCTION_DATA = {
   sitting_placement: { text: 'Sit directly in your square\nLabel should be in front of you' }
 };
 
+// True only when the card was auto-shown (header page / chapter end) — gates the
+// auto-dismiss in ui.showPage so manual instructions survive page flips.
+var headerInstructionShowing = false;
+
 function showInstruction(key, opts) {
   var data = INSTRUCTION_DATA[key];
   if (!data) return;
@@ -1834,6 +1839,7 @@ function showInstruction(key, opts) {
 function dismissInstruction() {
   var overlay = document.getElementById('instruction-overlay');
   overlay.style.display = 'none';
+  headerInstructionShowing = false;
   document.getElementById('instruction-select').value = '';
 }
 
@@ -1844,6 +1850,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('instruction-select').addEventListener('change', function() {
     if (this.value) {
       showInstruction(this.value);
+      headerInstructionShowing = false; // manual card — don't auto-dismiss on page change
     }
   });
 });

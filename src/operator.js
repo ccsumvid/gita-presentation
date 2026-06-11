@@ -103,8 +103,8 @@
     sendToProjector('animation-reset');
 
     var chId = dataLayer.getCurrentChapterId();
+    var page = dataLayer.getPage(index);
     if (!renderer.swapPrefetched(index, chId)) {
-      var page = dataLayer.getPage(index);
       if (!page) return;
       renderer.renderPage(page);
     }
@@ -120,12 +120,13 @@
       syncProjectorPage();
     }
 
-    // Feedback #6: namaskara mudra while header lines animate; dismissed on verse pages.
-    var pageData = dataLayer.getPage(index);
-    if (pageData && pageData.isHeader) {
+    // Feedback #6: namaskara mudra while header lines animate; auto-dismissed on verse pages.
+    // Only auto-shown cards are auto-dismissed — manual instructions survive page flips.
+    if (page && page.isHeader) {
       sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
       instructionShowing = true;
-    } else if (instructionShowing) {
+      headerInstructionShowing = true;
+    } else if (headerInstructionShowing) {
       dismissInstruction();
     }
 
@@ -224,9 +225,11 @@
     var chapterId = dataLayer.getCurrentChapterId();
 
     if (atChapterEnd) {
-      // Feedback #2 + #7: namaskara mudra at every chapter end.
+      // Feedback #2 + #7: namaskara mudra at every chapter end (auto-shown — may be
+      // auto-dismissed by the gap timer or the next chapter's verse pages).
       sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
       instructionShowing = true;
+      headerInstructionShowing = true;
 
       // Feedback #2: hard stop after Datta Stavam — operator resumes manually.
       if (chapterId === 'datta_stavam') return; // stay paused on the last page
@@ -330,10 +333,14 @@
 
   // Instruction dropdown
   var instructionShowing = false;
+  // True only when the card was auto-shown (header page / chapter end) — gates the
+  // auto-dismiss in showPage so manual instructions survive page flips.
+  var headerInstructionShowing = false;
 
   function dismissInstruction() {
     sendToProjector('dismiss-instruction');
     instructionShowing = false;
+    headerInstructionShowing = false;
     document.getElementById('instruction-select').value = '';
   }
 
@@ -344,6 +351,7 @@
     if (data) {
       sendToProjector('show-instruction', data);
       instructionShowing = true;
+      headerInstructionShowing = false; // manual card — don't auto-dismiss on page change
     }
   });
 

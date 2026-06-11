@@ -297,6 +297,12 @@ body {
   <label for="bpm-input">BPM</label>
   <input type="number" id="bpm-input" value="95" min="10" max="150" title="Beats Per Minute">
   <button id="bpm-up" title="Increase BPM">+</button>
+  <label for="chapter-gap">Chapter gap</label>
+  <select id="chapter-gap" title="Pause between chapters before the countdown">
+    <option value="3" selected>3 s</option>
+    <option value="5">5 s</option>
+    <option value="7">7 s</option>
+  </select>
   <button id="btn-restart-verse" title="Restart current verse">&#8634; Restart Verse</button>
   <button id="btn-restart-chapter" title="Restart current chapter">&#8634; Restart Chapter</button>
   <div class="separator"></div>
@@ -1237,10 +1243,9 @@ const animator = (function() {
       btnPlay.style.display = '';
       btnPause.style.display = 'none';
       hidePointer();
-      // Auto-advance to next page instantly
-      timeoutId = setTimeout(async function() {
-        await ui.nextPage();
-        animator.play();
+      // Auto-advance — ui decides (chapter gap, hard stop, countdown)
+      timeoutId = setTimeout(function() {
+        ui.handleAutoAdvance();
       }, 0);
       return;
     }
@@ -1484,6 +1489,30 @@ const ui = (function() {
     }
   }
 
+  // Auto-advance handler — called by animator when a page finishes animating.
+  // Feedback #2: configurable inter-chapter gap + hard stop after Datta Stavam.
+  // Feedback #5: countdown plays before each auto-started chapter.
+  async function handleAutoAdvance() {
+    var atChapterEnd = currentPage >= dataLayer.getPageCount() - 1;
+    var chapterId = dataLayer.getCurrentChapterId();
+
+    if (atChapterEnd) {
+      // Hard stop after Datta Stavam — resume manually.
+      if (chapterId === 'datta_stavam') return;
+      var gapMs = parseInt(document.getElementById('chapter-gap').value, 10) * 1000;
+      setTimeout(async function() {
+        await nextPage();                 // crosses into next chapter
+        startCountdown(function() {      // "Listen to Sruti" countdown, then play
+          animator.play();
+        });
+      }, gapMs);
+      return;
+    }
+
+    await nextPage();
+    animator.play();
+  }
+
   function startCountdown(callback) {
     var countdownOverlay = document.getElementById('countdown-overlay');
     var countdownNumber = countdownOverlay.querySelector('.countdown-number');
@@ -1655,7 +1684,7 @@ const ui = (function() {
     });
   }
 
-  return { init: init, bindControls: bindControls, nextPage: nextPage, prevPage: prevPage };
+  return { init: init, bindControls: bindControls, nextPage: nextPage, prevPage: prevPage, handleAutoAdvance: handleAutoAdvance };
 })();
 
 // ============================================================

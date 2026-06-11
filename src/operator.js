@@ -211,24 +211,33 @@
 
   // --- Auto-advance: when animator reaches end of page, go to next and resume ---
   animator.setOnAutoAdvance(async function() {
-    var prevPage = dataLayer.getPage(currentPage);
-    var leavingHeader = prevPage && prevPage.isHeader;
+    var atChapterEnd = currentPage >= dataLayer.getPageCount() - 1;
+    var chapterId = dataLayer.getCurrentChapterId();
 
-    if (leavingHeader) {
-      // Header just finished animating — show Pranam for 3s while header is still visible,
-      // then advance to verse 1
-      sendToProjector('show-instruction', INSTRUCTION_DATA['pranam']);
+    if (atChapterEnd) {
+      // Feedback #2: hard stop after Datta Stavam — operator resumes manually.
+      if (chapterId === 'datta_stavam') {
+        sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
+        instructionShowing = true;
+        return; // stay paused on the last page
+      }
+      // Feedback #2 + #7: namaskara during the inter-chapter gap, then countdown, then play.
+      var gapMs = parseInt(document.getElementById('chapter-gap').value, 10) * 1000;
+      sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
       instructionShowing = true;
       setTimeout(async function() {
         sendToProjector('dismiss-instruction');
         instructionShowing = false;
         document.getElementById('instruction-select').value = '';
-        await nextPage();
-        animator.play();
-      }, 3000);
+        await nextPage();                 // crosses into next chapter
+        startCountdown(function() {      // feedback #5: countdown plays in auto mode
+          animator.play();
+        });
+      }, gapMs);
       return;
     }
 
+    // Header pages: advance immediately (the old 3s pranam pause is removed).
     await nextPage();
     animator.play();
   });

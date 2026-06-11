@@ -1100,11 +1100,54 @@ const renderer = (function() {
     return elements;
   }
 
+  /**
+   * fitLines(target) — Shrink any verse line too wide for the display so it
+   * fits on a single display line (feedback #8, #9, #19).
+   *
+   * Overflow test: .verse-line has `white-space: normal` + `max-width`, so a
+   * long line wraps to a second display line instead of overflowing — and
+   * because both .verse-line and the verse container are shrink-to-fit flex
+   * items, `scrollWidth > clientWidth` on the line itself never fires (they
+   * grow together). The real wrap constraint is the #display parent's
+   * content-box width. So: temporarily force `nowrap` (scrollWidth then
+   * reports the full single-line text width) and compare it against the
+   * parent's content width. Font size is reduced until the text fits (floor
+   * 18px), then wrapping is restored (graceful fallback if the floor is hit).
+   *
+   * Runs synchronously at the end of the render path, BEFORE the animator
+   * reads syllable positions via getBoundingClientRect.
+   * Lines are recreated from scratch on every render, so no font-size reset
+   * is needed (resetting would clobber the inline vw sizes on header lines).
+   * Inside a hidden container all widths measure 0, making this a no-op.
+   */
+  function fitLines(target) {
+    const parent = target.parentElement;
+    if (!parent) return;
+    const ps = getComputedStyle(parent);
+    const avail = parent.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight);
+    if (!(avail > 0)) return; // hidden container — nothing to measure
+    const lines = target.querySelectorAll('.verse-line');
+    for (let i = 0; i < lines.length; i++) {
+      const el = lines[i];
+      el.style.whiteSpace = 'nowrap';
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      let guard = 0;
+      // "- 1" guards against scrollWidth's integer rounding hiding a
+      // sub-pixel overflow that would still wrap the last word
+      while (el.scrollWidth > avail - 1 && size > 18 && guard++ < 30) {
+        size -= 1;
+        el.style.fontSize = size + 'px';
+      }
+      el.style.whiteSpace = '';
+    }
+  }
+
   /** Render page into the active (visible) buffer. */
   function renderPage(pageData) {
     currentPageData = pageData;
     syllableElements = renderInto(buffers[activeBuffer], pageData);
     backBuffer = null;
+    fitLines(buffers[activeBuffer]);
   }
 
   /** Pre-render the next page into the hidden buffer. */
@@ -1129,6 +1172,9 @@ const renderer = (function() {
     currentPageData = backBuffer.pageData;
     syllableElements = backBuffer.elements;
     backBuffer = null;
+    // Prefetch rendered into a hidden buffer (widths measured 0 there) —
+    // fit now that the buffer is visible, before the animator reads positions
+    fitLines(buffers[activeBuffer]);
     return true;
   }
 

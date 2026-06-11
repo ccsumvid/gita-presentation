@@ -215,29 +215,27 @@
     var chapterId = dataLayer.getCurrentChapterId();
 
     if (atChapterEnd) {
-      // Feedback #2: hard stop after Datta Stavam — operator resumes manually.
-      if (chapterId === 'datta_stavam') {
-        sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
-        instructionShowing = true;
-        return; // stay paused on the last page
-      }
-      // Feedback #2 + #7: namaskara during the inter-chapter gap, then countdown, then play.
-      var gapMs = parseInt(document.getElementById('chapter-gap').value, 10) * 1000;
+      // Feedback #2 + #7: namaskara mudra at every chapter end.
       sendToProjector('show-instruction', INSTRUCTION_DATA['folded_hands']);
       instructionShowing = true;
+
+      // Feedback #2: hard stop after Datta Stavam — operator resumes manually.
+      if (chapterId === 'datta_stavam') return; // stay paused on the last page
+
+      // Inter-chapter gap, then countdown, then play (feedback #5).
+      var gapMs = parseInt(document.getElementById('chapter-gap').value, 10) * 1000;
       setTimeout(async function() {
-        sendToProjector('dismiss-instruction');
-        instructionShowing = false;
-        document.getElementById('instruction-select').value = '';
-        await nextPage();                 // crosses into next chapter
-        startCountdown(function() {      // feedback #5: countdown plays in auto mode
+        dismissInstruction();
+        await nextPage(); // crosses into next chapter
+        if (dataLayer.getCurrentChapterId() === chapterId) return; // chapter load failed — stay stopped
+        startCountdown(function() {
           animator.play();
         });
       }, gapMs);
       return;
     }
 
-    // Header pages: advance immediately (the old 3s pranam pause is removed).
+    // Mid-chapter pages (headers included): advance immediately — old 3s pranam pause removed.
     await nextPage();
     animator.play();
   });

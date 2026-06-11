@@ -1497,11 +1497,17 @@ const ui = (function() {
     var chapterId = dataLayer.getCurrentChapterId();
 
     if (atChapterEnd) {
-      // Hard stop after Datta Stavam — resume manually.
+      // Namaskara mudra at every chapter end (mirrors the operator app).
+      showInstruction('folded_hands');
+
+      // Hard stop after Datta Stavam — resume manually (click overlay to dismiss).
       if (chapterId === 'datta_stavam') return;
+
       var gapMs = parseInt(document.getElementById('chapter-gap').value, 10) * 1000;
       setTimeout(async function() {
-        await nextPage();                 // crosses into next chapter
+        dismissInstruction();
+        await nextPage(); // crosses into next chapter
+        if (dataLayer.getCurrentChapterId() === chapterId) return; // chapter load failed — stay stopped
         startCountdown(function() {      // "Listen to Sruti" countdown, then play
           animator.play();
         });
@@ -1513,7 +1519,11 @@ const ui = (function() {
     animator.play();
   }
 
+  var countdownActive = false;
+
   function startCountdown(callback) {
+    if (countdownActive) return;
+    countdownActive = true;
     var countdownOverlay = document.getElementById('countdown-overlay');
     var countdownNumber = countdownOverlay.querySelector('.countdown-number');
     countdownOverlay.style.display = 'flex';
@@ -1524,6 +1534,7 @@ const ui = (function() {
       count--;
       if (count <= 0) {
         clearInterval(interval);
+        countdownActive = false;
         countdownOverlay.style.display = 'none';
         broadcastState();
         if (callback) callback();

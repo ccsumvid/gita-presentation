@@ -742,61 +742,12 @@ const renderer = (function() {
         const tokens = analyzer.analyzeLine(analyzeText);
         const totalBeats = tokens.reduce((sum, t) => sum + t.beats, 0);
 
-        // Split long-chandas padas only for chapters that use the 8-line book layout
-        // (Dhyana Shlokas and Invocation Prayers). Gita chapters 1-18 use 4-line layout.
-        const syllableCount = tokens.filter(t => !t.isMarker).length;
-        const chId = dataLayer.getCurrentChapterId();
-        const allowLongChandasSplit = (chId === '0' || chId === 'invocation_prayers');
-        if (syllableCount > 9 && allowLongChandasSplit) {
-          // Split at word boundary closest to half syllables.
-          // On a tie, prefer the boundary AT OR AFTER the midpoint so the longer
-          // group comes first (natural for Trishtubh 6+5 or 5+6 patterns).
-          const half = Math.ceil(syllableCount / 2);
-          const wordBdry = []; // {syl, wordIdx} for each word boundary
-          let cumSyl = 0, wIdx = 0;
-          for (const t of tokens) {
-            if (!t.isMarker) cumSyl++;
-            if (t.wordEnd) wordBdry.push({ syl: cumSyl, wordIdx: ++wIdx });
-          }
-          let splitAfterSyl = half, splitWord = Math.max(1, Math.floor(wordBdry.length / 2)), bestDist = Infinity;
-          for (const wb of wordBdry) {
-            const dist = Math.abs(wb.syl - half);
-            if (dist < bestDist || (dist === bestDist && wb.syl >= half)) {
-              bestDist = dist; splitAfterSyl = wb.syl; splitWord = wb.wordIdx;
-            }
-          }
-
-          const dispWords = displayText.split(/\s+/).filter(Boolean);
-          const firstHalf = dispWords.slice(0, splitWord).join(' ');
-          const secondHalf = dispWords.slice(splitWord).join(' ');
-          const firstBeats = Math.max(1, Math.round(totalBeats * splitAfterSyl / syllableCount));
-          const secondBeats = Math.max(1, totalBeats - firstBeats);
-
-          // First half — splitEnd (not lineEnd) so no extra pause between the two halves
-          const span1 = document.createElement('span');
-          span1.className = 'syllable';
-          span1.dataset.index = elements.length;
-          span1.dataset.beats = firstBeats;
-          span1.dataset.splitEnd = '1';
-          span1.textContent = firstHalf;
-          elements.push(span1);
-          lineDiv.appendChild(span1);
-          target.appendChild(lineDiv);
-
-          // Second half — tighter top margin shows it belongs to the same pada
-          const lineDiv2 = document.createElement('div');
-          lineDiv2.className = 'verse-line verse-line-continuation';
-          const span2 = document.createElement('span');
-          span2.className = 'syllable';
-          span2.dataset.index = elements.length;
-          span2.dataset.beats = secondBeats;
-          span2.dataset.lineEnd = '1';
-          span2.textContent = secondHalf;
-          elements.push(span2);
-          lineDiv2.appendChild(span2);
-          target.appendChild(lineDiv2);
-          continue;
-        } else {
+        // Each data entry = one pāda (display line). Long pādas are NOT split
+        // into two display lines — fitLines() shrinks them to fit. This matches
+        // the reference deck (each pāda on one line) and the web build
+        // (index.html), and fixes the "Dhyana line mixups" (feedback #10–19)
+        // that came from breaking a pāda at the wrong mid-pāda point.
+        {
           const span = document.createElement('span');
           span.className = 'syllable';
           span.dataset.index = elements.length;
@@ -806,67 +757,13 @@ const renderer = (function() {
           lineDiv.appendChild(span);
         }
       } else {
-        // Asterisk mode: show \u2731 per syllable using appropriate prosody engine
+        // Asterisk mode: show one asterisk per syllable using the prosody engine.
+        // Each entry (pada) renders as a single line -- no mid-pada splitting --
+        // and fitLines() shrinks any overflow, matching the reference deck and
+        // the web build (feedback #10-19 Dhyana line mixups).
         const tokens = analyzer.analyzeLine(analyzeText);
-        const syllableCount = tokens.filter(t => !t.isMarker).length;
 
-        const chIdAst = dataLayer.getCurrentChapterId();
-        const allowSplitAst = (chIdAst === '0' || chIdAst === 'invocation_prayers');
-        if (syllableCount > 9 && allowSplitAst) {
-          // Long-chandas: split into two lines at the word boundary closest to half syllables
-          const half = Math.ceil(syllableCount / 2);
-          // Asterisk mode: split at the exact syllable midpoint for even display.
-          // Word boundaries are respected for post-split only (markers stay on line 2).
-          const splitAtSyl = Math.floor(syllableCount / 2);
-
-          const lineDiv2 = document.createElement('div');
-          lineDiv2.className = 'verse-line verse-line-continuation';
-          let currentDiv = lineDiv;
-          let syllIdx = 0, switched = false;
-
-          for (let ti = 0; ti < tokens.length; ti++) {
-            const token = tokens[ti];
-
-            // Switch to line 2 at the exact midpoint syllable
-            if (!switched && !token.isMarker && syllIdx === splitAtSyl) {
-              for (let i = elements.length - 1; i >= lineStartIndex; i--) {
-                if (!elements[i].classList.contains('verse-marker')) {
-                  elements[i].dataset.splitEnd = '1'; break; // no extra pause between halves
-                }
-              }
-              target.appendChild(lineDiv);
-              currentDiv = lineDiv2;
-              switched = true;
-            }
-
-            const span = document.createElement('span');
-            span.dataset.beats = token.beats;
-
-            if (token.isMarker) {
-              span.className = 'verse-marker';
-              span.textContent = token.text;
-              elements.push(span);
-            } else {
-              span.className = 'syllable';
-              span.dataset.index = elements.length;
-              span.textContent = '\u2731';
-              elements.push(span);
-              syllIdx++;
-            }
-            currentDiv.appendChild(span);
-          }
-
-          // Mark lineEnd on last syllable of second half
-          for (let i = elements.length - 1; i >= lineStartIndex; i--) {
-            if (!elements[i].classList.contains('verse-marker')) {
-              elements[i].dataset.lineEnd = '1'; break;
-            }
-          }
-          target.appendChild(currentDiv);
-          continue;
-        }
-
-        // Anushtubh (8 syllables): normal single-line rendering
+        // Single-line rendering (one asterisk per syllable, markers inline)
         for (let ti = 0; ti < tokens.length; ti++) {
           const token = tokens[ti];
           const span = document.createElement('span');

@@ -167,6 +167,86 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
   opacity: 0.6;
 }
 #update-banner button:hover { opacity: 1; background: none; }
+
+/* Settings button */
+.settings-btn { width: 100%; background: #2a2a2a; border-color: #555; color: #ccc; font-size: 15px; padding: 11px; }
+.settings-btn:hover { background: #3a3a3a; }
+
+/* Settings overlay + panel */
+#settings-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.settings-panel {
+  background: #000;
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.settings-title {
+  color: #FFD700;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 12px;
+  align-items: center;
+}
+.settings-grid label { color: #ccc; font-size: 14px; }
+.settings-grid input[type="number"] { width: 90px; }
+.settings-subtitle {
+  color: #FFD700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 18px 0 8px;
+}
+.settings-section-list {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 8px;
+}
+.settings-section-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+}
+.settings-section-name {
+  flex: 1;
+  color: #ddd;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.settings-section-row input[type="number"] { width: 80px; flex: 0 0 auto; }
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.settings-actions-spacer { flex: 1; }
+.settings-save { background: #1a7a2e; border-color: #2ecc40; }
+.settings-save:hover { background: #2ecc40; color: #000; }
+.settings-reset { background: #5a1010; border-color: #a33; color: #f0a0a0; }
+.settings-reset:hover { background: #a33; color: #fff; }
 </style>
 </head>
 <body>
@@ -204,14 +284,6 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
   </div>
   <button id="bpm-up">+</button>
 </div>
-
-<!-- Chapter gap -->
-<div class="section-label">Chapter Gap</div>
-<select id="chapter-gap" aria-label="Chapter gap" title="Pause between chapters before the countdown">
-  <option value="3" selected>3 s</option>
-  <option value="5">5 s</option>
-  <option value="7">7 s</option>
-</select>
 
 <!-- Pace indicators -->
 <div class="section-label">Pace Signal</div>
@@ -288,6 +360,43 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
 
 <!-- Projector -->
 <button class="projector-btn" id="btn-projector">&#128250; Open Projector</button>
+
+<!-- Settings -->
+<button class="settings-btn" id="btn-settings" title="Chant timing settings">&#9881; Settings</button>
+
+<!-- Settings panel (hidden until opened) -->
+<div id="settings-overlay">
+  <div class="settings-panel">
+    <div class="settings-title">&#9881; Chant Settings</div>
+
+    <div class="settings-grid">
+      <label for="set-line-end">Line-end pause (mātrās)</label>
+      <input type="number" id="set-line-end" min="0" max="8" step="0.5">
+
+      <label for="set-sloka-end">Dhyana sloka-end pause (ms)</label>
+      <input type="number" id="set-sloka-end" min="0" max="2000" step="10">
+
+      <label for="set-colophon">Colophon slowdown (BPM drop)</label>
+      <input type="number" id="set-colophon" min="0" max="80" step="1">
+
+      <label for="set-countdown">Countdown (seconds)</label>
+      <input type="number" id="set-countdown" min="0" max="15" step="1">
+
+      <label for="set-chapter-gap">Chapter gap (seconds)</label>
+      <input type="number" id="set-chapter-gap" min="0" max="15" step="1">
+    </div>
+
+    <div class="settings-subtitle">Per-section tempo (SPM) — blank = manual / no default</div>
+    <div id="settings-section-list" class="settings-section-list"></div>
+
+    <div class="settings-actions">
+      <button id="btn-settings-reset" class="settings-reset">Reset to defaults</button>
+      <span class="settings-actions-spacer"></span>
+      <button id="btn-settings-close">Cancel</button>
+      <button id="btn-settings-save" class="settings-save">Save</button>
+    </div>
+  </div>
+</div>
 
 <!-- Hidden display area for operator's own rendering -->
 <div id="display" style="display:none;">

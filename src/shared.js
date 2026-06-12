@@ -939,9 +939,17 @@ const animator = (function() {
   // Standard line-end pause: 2 mātrās (one guru) after every pāda/line, applied to
   // all chapters EXCEPT the Dhyana shlokas (chapter '0'), which keep their own
   // meter-aware pacing per the recitation instructions.
-  const LINE_END_PAUSE_BEATS = 2;
+  // Mutable (operator Settings panel overrides via setChantConfig); index.html keeps
+  // its own hardcoded const copy — the standalone web app is unaffected.
+  let LINE_END_PAUSE_BEATS = 2;
   // Dhyana exception only: fixed 30 ms at sloka end (|| double-danda) per the tempo sheet.
-  const SLOKA_END_PAUSE_MS = 30;
+  let SLOKA_END_PAUSE_MS = 30;
+
+  // Operator Settings panel hook — update the two pause values at runtime.
+  function setChantConfig(cfg) {
+    if (cfg && typeof cfg.lineEndPauseBeats === 'number') LINE_END_PAUSE_BEATS = cfg.lineEndPauseBeats;
+    if (cfg && typeof cfg.dhyanaSlokaEndMs === 'number') SLOKA_END_PAUSE_MS = cfg.dhyanaSlokaEndMs;
+  }
   let onSyllableChange = null; // callback: function(index, state) where state is 'active' or 'done'
   let onAutoAdvance = null; // callback: called when animation reaches end of page
 
@@ -1175,6 +1183,7 @@ const animator = (function() {
     getState: getState,
     restore: restore,
     getBeatMs: getBeatMs,
+    setChantConfig: setChantConfig,
     setOnSyllableChange: function(cb) { onSyllableChange = cb; },
     setOnAutoAdvance: function(cb) { onAutoAdvance = cb; }
   };

@@ -6,10 +6,75 @@
   var currentPage = 0;
   var currentDisplayMode = 'asterisk';
   var projectorOpen = false;
-  // tempo sheet: colophon ("om tatsaditi") / ending pages run 5 SPM slower (= 20 internal bpm).
-  var COLOPHON_BPM_DROP = 20;
+
+  // --- Chant timing/tempo settings (operator-only, persisted in localStorage) ---
+  // The standalone web app (index.html) keeps its own hardcoded defaults; this panel
+  // only affects the Electron operator window.
+  var CHANT_DEFAULTS = {
+    lineEndPauseBeats: 2,    // mātrās at each non-dhyana line end (shared.js LINE_END_PAUSE_BEATS)
+    dhyanaSlokaEndMs: 30,    // dhyana '0' sloka-end pause in ms (shared.js SLOKA_END_PAUSE_MS)
+    colophonBpmDrop: 20,     // internal bpm drop on colophon / ending pages
+    countdownSeconds: 5,     // pre-play countdown length
+    chapterGapSeconds: 3,    // gap between chapters before the countdown
+    sectionBpm: {}           // chapterId -> internal BPM override; empty = use data defaultBpm
+  };
+
+  function loadChantSettings() {
+    var merged = {
+      lineEndPauseBeats: CHANT_DEFAULTS.lineEndPauseBeats,
+      dhyanaSlokaEndMs: CHANT_DEFAULTS.dhyanaSlokaEndMs,
+      colophonBpmDrop: CHANT_DEFAULTS.colophonBpmDrop,
+      countdownSeconds: CHANT_DEFAULTS.countdownSeconds,
+      chapterGapSeconds: CHANT_DEFAULTS.chapterGapSeconds,
+      sectionBpm: {}
+    };
+    try {
+      var raw = window.localStorage.getItem('gitaChantSettings');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          if (typeof parsed.lineEndPauseBeats === 'number') merged.lineEndPauseBeats = parsed.lineEndPauseBeats;
+          if (typeof parsed.dhyanaSlokaEndMs === 'number') merged.dhyanaSlokaEndMs = parsed.dhyanaSlokaEndMs;
+          if (typeof parsed.colophonBpmDrop === 'number') merged.colophonBpmDrop = parsed.colophonBpmDrop;
+          if (typeof parsed.countdownSeconds === 'number') merged.countdownSeconds = parsed.countdownSeconds;
+          if (typeof parsed.chapterGapSeconds === 'number') merged.chapterGapSeconds = parsed.chapterGapSeconds;
+          if (parsed.sectionBpm && typeof parsed.sectionBpm === 'object') {
+            for (var k in parsed.sectionBpm) {
+              if (Object.prototype.hasOwnProperty.call(parsed.sectionBpm, k) && typeof parsed.sectionBpm[k] === 'number') {
+                merged.sectionBpm[k] = parsed.sectionBpm[k];
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Bad gitaChantSettings — using defaults:', e);
+    }
+    return merged;
+  }
+
+  var chantSettings = loadChantSettings();
+
+  function saveChantSettings() {
+    try {
+      window.localStorage.setItem('gitaChantSettings', JSON.stringify(chantSettings));
+    } catch (e) {
+      console.warn('Could not persist gitaChantSettings:', e);
+    }
+  }
+
+  // Push the two animator-side pause values into shared.js. Operator-side constants
+  // (colophon drop, countdown, chapter gap, section BPM) are read directly from
+  // chantSettings at their use sites.
+  function applyChantSettings() {
+    animator.setChantConfig({
+      lineEndPauseBeats: chantSettings.lineEndPauseBeats,
+      dhyanaSlokaEndMs: chantSettings.dhyanaSlokaEndMs
+    });
+  }
+
   // The tempo the chapter should run at: set on chapter load (defaultBpm or current),
-  // updated on manual SPM change. Colophon pages run at currentChapterBpm - COLOPHON_BPM_DROP.
+  // updated on manual SPM change. Colophon pages run at currentChapterBpm - colophonBpmDrop.
   var currentChapterBpm = 380;
   var closerSlowApplied = false;
   var chapterSelect = document.getElementById('chapter-select');
@@ -96,8 +161,13 @@
     try {
       renderer.invalidatePrefetch();
       var chData = await dataLayer.fetchChapter(chapterId);
-      // Apply chapter-specific default BPM if defined (e.g. Dhyana Shlokas)
-      if (chData && chData.defaultBpm) {
+      // Apply BPM for this section: a Settings override (internal bpm) wins over the
+      // data defaultBpm. Sections without either keep the current running bpm.
+      var override = chantSettings.sectionBpm[String(chapterId)];
+      if (typeof override === 'number') {
+        animator.setBpm(override);
+        updateSpmDisplay();
+      } else if (chData && chData.defaultBpm) {
         animator.setBpm(chData.defaultBpm);
         updateSpmDisplay();
       }
@@ -132,7 +202,7 @@
     // tempo sheet: slow colophon ("om tatsaditi") / ending pages by 5 SPM (20 internal bpm).
     // Restore the chapter base tempo when leaving a colophon page.
     if (page && page.isCloser) {
-      animator.setBpm(currentChapterBpm - COLOPHON_BPM_DROP);
+      animator.setBpm(currentChapterBpm - chantSettings.colophonBpmDrop);
       closerSlowApplied = true;
       updateSpmDisplay();
     } else if (closerSlowApplied) {
@@ -195,7 +265,7 @@
   function startCountdown(callback) {
     if (countdownActive) return;
     countdownActive = true;
-    var count = 5;
+    var count = chantSettings.countdownSeconds;
     sendToProjector('countdown', { number: count });
     var interval = setInterval(function() {
       count--;
@@ -236,7 +306,7 @@
   // recover the intended base tempo.
   function noteManualTempoChange() {
     var runningBpm = animator.getState().bpm;
-    currentChapterBpm = closerSlowApplied ? runningBpm + COLOPHON_BPM_DROP : runningBpm;
+    currentChapterBpm = closerSlowApplied ? runningBpm + chantSettings.colophonBpmDrop : runningBpm;
   }
 
   spmInput.addEventListener('change', function() {
@@ -280,7 +350,7 @@
       if (chapterId === 'datta_stavam') return; // stay paused on the last page
 
       // Inter-chapter gap, then countdown, then play (feedback #5).
-      var gapMs = parseInt(document.getElementById('chapter-gap').value, 10) * 1000;
+      var gapMs = chantSettings.chapterGapSeconds * 1000;
       setTimeout(async function() {
         dismissInstruction();
         await nextPage(); // crosses into next chapter
@@ -461,6 +531,147 @@
     }
   });
 
+  // --- Settings panel ---
+  var settingsOverlay = document.getElementById('settings-overlay');
+  var settingsSectionList = document.getElementById('settings-section-list');
+  var fldLineEnd = document.getElementById('set-line-end');
+  var fldSlokaEnd = document.getElementById('set-sloka-end');
+  var fldColophon = document.getElementById('set-colophon');
+  var fldCountdown = document.getElementById('set-countdown');
+  var fldChapterGap = document.getElementById('set-chapter-gap');
+
+  // Build the per-section BPM rows once (label + number input keyed by chapterId).
+  // Displayed value is SPM = internal bpm / 4 (matches the rest of the UI); we store
+  // internal = SPM * 4. Section labels reuse the chapter dropdown's option text.
+  var sectionBpmInputs = {}; // chapterId -> input element
+  function buildSectionBpmRows() {
+    while (settingsSectionList.firstChild) settingsSectionList.removeChild(settingsSectionList.firstChild);
+    sectionBpmInputs = {};
+    var labelById = {};
+    for (var oi = 0; oi < chapterSelect.options.length; oi++) {
+      labelById[chapterSelect.options[oi].value] = chapterSelect.options[oi].textContent;
+    }
+    var order = dataLayer.CHAPTER_ORDER;
+    for (var i = 0; i < order.length; i++) {
+      var id = order[i];
+      var row = document.createElement('div');
+      row.className = 'settings-section-row';
+
+      var lbl = document.createElement('span');
+      lbl.className = 'settings-section-name';
+      lbl.textContent = labelById[id] || id;
+      row.appendChild(lbl);
+
+      var inp = document.createElement('input');
+      inp.type = 'number';
+      inp.min = '10';
+      inp.max = '150';
+      inp.step = '1';
+      inp.placeholder = 'manual';
+      inp.dataset.chapterId = id;
+      row.appendChild(inp);
+
+      sectionBpmInputs[id] = inp;
+      settingsSectionList.appendChild(row);
+    }
+  }
+
+  // Effective internal BPM for a section: Settings override, else data defaultBpm.
+  // Returns null when neither is known (sections without a defaultBpm → "manual").
+  var DATA_DEFAULT_BPM = {
+    datta_stavam: 360, invocation_prayers: 340, '0': 300, '1': 340,
+    '2': 380, '3': 380, '4': 380, '5': 380, '6': 380, '7': 380, '8': 380,
+    '9': 380, '10': 380, '11': 380, '12': 380, '13': 380, '14': 380,
+    '15': 380, '16': 380, '17': 380, '18': 380, gita_mahatmyam: 380,
+    kshama_prarthana: 320
+  };
+  function effectiveSectionBpm(id) {
+    if (typeof chantSettings.sectionBpm[id] === 'number') return chantSettings.sectionBpm[id];
+    if (typeof DATA_DEFAULT_BPM[id] === 'number') return DATA_DEFAULT_BPM[id];
+    return null;
+  }
+
+  // Populate all settings inputs from the current chantSettings.
+  function refreshSettingsInputs() {
+    fldLineEnd.value = chantSettings.lineEndPauseBeats;
+    fldSlokaEnd.value = chantSettings.dhyanaSlokaEndMs;
+    fldColophon.value = chantSettings.colophonBpmDrop;
+    fldCountdown.value = chantSettings.countdownSeconds;
+    fldChapterGap.value = chantSettings.chapterGapSeconds;
+    for (var id in sectionBpmInputs) {
+      if (!Object.prototype.hasOwnProperty.call(sectionBpmInputs, id)) continue;
+      var internal = effectiveSectionBpm(id);
+      sectionBpmInputs[id].value = (internal === null) ? '' : Math.round(internal / 4);
+    }
+  }
+
+  function openSettings() {
+    refreshSettingsInputs();
+    settingsOverlay.style.display = 'flex';
+  }
+  function closeSettings() {
+    settingsOverlay.style.display = 'none';
+  }
+
+  function clampNum(val, min, max, fallback) {
+    var n = parseFloat(val);
+    if (isNaN(n)) return fallback;
+    return Math.max(min, Math.min(max, n));
+  }
+
+  function saveSettings() {
+    chantSettings.lineEndPauseBeats = clampNum(fldLineEnd.value, 0, 8, CHANT_DEFAULTS.lineEndPauseBeats);
+    chantSettings.dhyanaSlokaEndMs = clampNum(fldSlokaEnd.value, 0, 2000, CHANT_DEFAULTS.dhyanaSlokaEndMs);
+    chantSettings.colophonBpmDrop = clampNum(fldColophon.value, 0, 80, CHANT_DEFAULTS.colophonBpmDrop);
+    chantSettings.countdownSeconds = Math.round(clampNum(fldCountdown.value, 0, 15, CHANT_DEFAULTS.countdownSeconds));
+    chantSettings.chapterGapSeconds = clampNum(fldChapterGap.value, 0, 15, CHANT_DEFAULTS.chapterGapSeconds);
+
+    // Per-section BPM: a value present → store internal = SPM*4; blank → clear override.
+    chantSettings.sectionBpm = {};
+    for (var id in sectionBpmInputs) {
+      if (!Object.prototype.hasOwnProperty.call(sectionBpmInputs, id)) continue;
+      var raw = sectionBpmInputs[id].value;
+      if (raw !== '' && raw !== null && !isNaN(parseFloat(raw))) {
+        var spm = clampNum(raw, 10, 150, 95);
+        chantSettings.sectionBpm[id] = Math.round(spm) * 4;
+      }
+    }
+
+    saveChantSettings();
+    applyChantSettings();
+
+    // If the changed BPM applies to the current chapter, re-apply it immediately.
+    var curId = dataLayer.getCurrentChapterId();
+    if (curId !== null) {
+      var eff = effectiveSectionBpm(String(curId));
+      if (typeof eff === 'number') {
+        animator.setBpm(eff);
+        currentChapterBpm = animator.getState().bpm;
+        closerSlowApplied = false;
+        updateSpmDisplay();
+      }
+    }
+
+    closeSettings();
+  }
+
+  function resetSettings() {
+    try { window.localStorage.removeItem('gitaChantSettings'); } catch (e) {}
+    chantSettings = loadChantSettings(); // no stored key now → CHANT_DEFAULTS
+    applyChantSettings();
+    refreshSettingsInputs();
+  }
+
+  buildSectionBpmRows();
+  document.getElementById('btn-settings').addEventListener('click', openSettings);
+  document.getElementById('btn-settings-save').addEventListener('click', saveSettings);
+  document.getElementById('btn-settings-reset').addEventListener('click', resetSettings);
+  document.getElementById('btn-settings-close').addEventListener('click', closeSettings);
+  settingsOverlay.addEventListener('click', function(e) {
+    if (e.target === settingsOverlay) closeSettings(); // click backdrop to dismiss
+  });
+
   // --- Init ---
+  applyChantSettings();              // push persisted pause values into the animator
   loadChapter('datta_stavam', true); // start with blank projector until Play
 })();

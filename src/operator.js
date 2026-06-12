@@ -6,6 +6,12 @@
   var currentPage = 0;
   var currentDisplayMode = 'asterisk';
   var projectorOpen = false;
+  // tempo sheet: colophon ("om tatsaditi") / ending pages run 5 SPM slower (= 20 internal bpm).
+  var COLOPHON_BPM_DROP = 20;
+  // The tempo the chapter should run at: set on chapter load (defaultBpm or current),
+  // updated on manual SPM change. Colophon pages run at currentChapterBpm - COLOPHON_BPM_DROP.
+  var currentChapterBpm = 380;
+  var closerSlowApplied = false;
   var chapterSelect = document.getElementById('chapter-select');
   var shlokaSelect = document.getElementById('shloka-select');
 
@@ -95,6 +101,9 @@
         animator.setBpm(chData.defaultBpm);
         updateSpmDisplay();
       }
+      // Capture the base tempo the chapter runs at (used to offset colophon pages).
+      currentChapterBpm = animator.getState().bpm;
+      closerSlowApplied = false;
       populateShlokaDropdown();
       currentPage = 0;
       showPage(0, blankProjector);
@@ -119,6 +128,18 @@
     currentPage = index;
     updatePositionBar();
     shlokaSelect.value = currentPage;
+
+    // tempo sheet: slow colophon ("om tatsaditi") / ending pages by 5 SPM (20 internal bpm).
+    // Restore the chapter base tempo when leaving a colophon page.
+    if (page && page.isCloser) {
+      animator.setBpm(currentChapterBpm - COLOPHON_BPM_DROP);
+      closerSlowApplied = true;
+      updateSpmDisplay();
+    } else if (closerSlowApplied) {
+      animator.setBpm(currentChapterBpm);
+      closerSlowApplied = false;
+      updateSpmDisplay();
+    }
 
     if (blankProjector) {
       // Blank the projector now — header will appear after countdown
@@ -209,11 +230,21 @@
     spmInput.value = Math.round(animator.getState().bpm / 4);
   }
 
+  // Record an operator's manual tempo change as the new chapter base tempo so the
+  // colophon offset stays relative to the operator's chosen SPM. If a colophon slow
+  // is currently applied, the running bpm is already dropped, so add it back to
+  // recover the intended base tempo.
+  function noteManualTempoChange() {
+    var runningBpm = animator.getState().bpm;
+    currentChapterBpm = closerSlowApplied ? runningBpm + COLOPHON_BPM_DROP : runningBpm;
+  }
+
   spmInput.addEventListener('change', function() {
     var val = parseInt(spmInput.value, 10);
     if (!isNaN(val) && val > 0) {
       animator.setBpm(val * 4);
     }
+    noteManualTempoChange();
     updateSpmDisplay();
   });
 
@@ -305,10 +336,12 @@
   // SPM controls
   document.getElementById('bpm-up').addEventListener('click', function() {
     animator.setBpm(animator.getState().bpm + 20);
+    noteManualTempoChange();
     updateSpmDisplay();
   });
   document.getElementById('bpm-down').addEventListener('click', function() {
     animator.setBpm(animator.getState().bpm - 20);
+    noteManualTempoChange();
     updateSpmDisplay();
   });
 
@@ -415,9 +448,11 @@
       sendToProjector('animation-reset');
     } else if (e.key === '+' || e.key === '=') {
       animator.setBpm(animator.getState().bpm + 20);
+      noteManualTempoChange();
       updateSpmDisplay();
     } else if (e.key === '-' || e.key === '_') {
       animator.setBpm(animator.getState().bpm - 20);
+      noteManualTempoChange();
       updateSpmDisplay();
     } else if (e.code === 'Escape') {
       if (instructionShowing) {

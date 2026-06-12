@@ -1272,6 +1272,8 @@ const animator = (function() {
   let currentIndex = -1;
   let timeoutId = null;
   let bpm = 380; // internal beats; displayed as whole notes (bpm/4), default 95
+  // tempo sheet: 30 ms at sloka end (fixed pause at every || double-danda)
+  const SLOKA_END_PAUSE_MS = 30;
 
   const pointer = document.getElementById('pointer');
   const btnPlay = document.getElementById('btn-play');
@@ -1367,16 +1369,21 @@ const animator = (function() {
       timeoutId = setTimeout(function() {
         el.classList.remove('active');
         el.classList.add('done');
-        // Mark skipped dandas as done
+        // Mark skipped dandas as done and collect their beats (| = 2 beats, || = 4 beats)
+        var markerBeats = 0;
         for (var i = currentIndex + 1; i < nextIdx; i++) {
+          markerBeats += (parseInt(elems[i].dataset.beats, 10) || 0);
           elems[i].classList.add('done');
         }
         currentIndex = nextIdx - 1;
         if (nextIdx < elems.length) {
           positionPointerInstant(elems[nextIdx]);
         }
-        // Wait 1 laghu then advance
-        timeoutId = setTimeout(advance, getBeatMs());
+        // End of sloka (|| double-danda = 4 beats) gets a fixed short pause per the
+        // tempo sheet ("30 msec at sloka end"); mid-sloka pada breaks (| = 2 beats)
+        // and intra-pada line wraps keep the beat-based pause (1 laghu).
+        var pauseMs = (markerBeats >= 4) ? SLOKA_END_PAUSE_MS : getBeatMs();
+        timeoutId = setTimeout(advance, pauseMs);
       }, durationMs);
     } else if (nextIdx < elems.length) {
       // Glide pointer from current toward next syllable over the duration
@@ -1471,6 +1478,20 @@ const ui = (function() {
   let currentPage = 0;
   const chapterSelect = document.getElementById('chapter-select');
   const shlokaSelect = document.getElementById('shloka-select');
+  // tempo sheet: colophon ("om tatsaditi") / ending pages run 5 SPM slower (= 20 internal bpm).
+  var COLOPHON_BPM_DROP = 20;
+  // The tempo the chapter should run at: set on chapter load (defaultBpm or current),
+  // updated on manual SPM change. Colophon pages run at currentChapterBpm - COLOPHON_BPM_DROP.
+  var currentChapterBpm = 380;
+  var closerSlowApplied = false;
+
+  // Record an operator's manual tempo change as the new chapter base tempo so the
+  // colophon offset stays relative to the chosen SPM. If a colophon slow is currently
+  // applied, the running bpm is already dropped, so add it back to recover the base.
+  function noteManualTempoChange() {
+    var runningBpm = animator.getState().bpm;
+    currentChapterBpm = closerSlowApplied ? runningBpm + COLOPHON_BPM_DROP : runningBpm;
+  }
 
   function populateShlokaDropdown() {
     while (shlokaSelect.firstChild) shlokaSelect.removeChild(shlokaSelect.firstChild);
@@ -1508,6 +1529,9 @@ const ui = (function() {
         var bpmInputEl = document.getElementById('bpm-input');
         if (bpmInputEl) bpmInputEl.value = Math.round(animator.getState().bpm / 4);
       }
+      // Capture the base tempo the chapter runs at (used to offset colophon pages).
+      currentChapterBpm = animator.getState().bpm;
+      closerSlowApplied = false;
       populateShlokaDropdown();
       currentPage = 0;
       showPage(0);
@@ -1536,6 +1560,18 @@ const ui = (function() {
     currentPage = index;
     updatePageInfo();
     syncShlokaDropdown();
+
+    // tempo sheet: slow colophon ("om tatsaditi") / ending pages by 5 SPM (20 internal bpm).
+    // Restore the chapter base tempo when leaving a colophon page.
+    if (page && page.isCloser) {
+      animator.setBpm(currentChapterBpm - COLOPHON_BPM_DROP);
+      closerSlowApplied = true;
+    } else if (closerSlowApplied) {
+      animator.setBpm(currentChapterBpm);
+      closerSlowApplied = false;
+    }
+    var bpmInputDisp = document.getElementById('bpm-input');
+    if (bpmInputDisp) bpmInputDisp.value = Math.round(animator.getState().bpm / 4);
 
     // Feedback #6 + #7: namaskara mudra (corner card) while header lines animate, on the
     // colophon ("|| ōṃ tatsaditi ...") page, on each chapter's trailing sarvadharmān
@@ -1718,6 +1754,7 @@ const ui = (function() {
       if (!isNaN(val) && val > 0) {
         animator.setBpm(val * 4);
       }
+      noteManualTempoChange();
       updateBpmDisplay();
     }
     bpmInput.addEventListener('change', setBpmFromInput);
@@ -1730,18 +1767,22 @@ const ui = (function() {
     });
     document.getElementById('bpm-up').addEventListener('click', function() {
       animator.setBpm(animator.getState().bpm + 20);
+      noteManualTempoChange();
       updateBpmDisplay();
     });
     document.getElementById('bpm-down').addEventListener('click', function() {
       animator.setBpm(animator.getState().bpm - 20);
+      noteManualTempoChange();
       updateBpmDisplay();
     });
     document.addEventListener('keydown', function(e) {
       if (e.key === '+' || e.key === '=') {
         animator.setBpm(animator.getState().bpm + 20);
+        noteManualTempoChange();
         updateBpmDisplay();
       } else if (e.key === '-' || e.key === '_') {
         animator.setBpm(animator.getState().bpm - 20);
+        noteManualTempoChange();
         updateBpmDisplay();
       }
     });

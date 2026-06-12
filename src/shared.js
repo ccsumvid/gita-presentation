@@ -1039,6 +1039,8 @@ const animator = (function() {
   let currentIndex = -1;
   let timeoutId = null;
   let bpm = 380; // internal beats; displayed as whole notes (bpm/4), default 95
+  // tempo sheet: 30 ms at sloka end (fixed pause at every || double-danda)
+  const SLOKA_END_PAUSE_MS = 30;
   let onSyllableChange = null; // callback: function(index, state) where state is 'active' or 'done'
   let onAutoAdvance = null; // callback: called when animation reaches end of page
 
@@ -1177,8 +1179,11 @@ const animator = (function() {
         if (nextIdx < elems.length) {
           positionPointerInstant(elems[nextIdx]);
         }
-        // Pause for marker beats + 1 laghu before continuing
-        timeoutId = setTimeout(advance, (markerBeats + 1) * getBeatMs());
+        // End of sloka (|| double-danda = 4 beats) gets a fixed short pause per the
+        // tempo sheet ("30 msec at sloka end"); mid-sloka pada breaks (| = 2 beats)
+        // and intra-pada line wraps keep the beat-based pause (marker beats + 1 laghu).
+        var pauseMs = (markerBeats >= 4) ? SLOKA_END_PAUSE_MS : (markerBeats + 1) * getBeatMs();
+        timeoutId = setTimeout(advance, pauseMs);
       }, durationMs);
     } else if (nextIdx < elems.length) {
       // Glide pointer from current toward next syllable over the duration

@@ -1046,8 +1046,8 @@ const animator = (function() {
     }
 
     if (el.dataset.splitEnd) {
-      // Mid-pada split: transition to continuation line with NO extra pause
-      // The two halves of the same pada flow continuously
+      // splitEnd: advance to the next line with no inter-line pause — used by
+      // multi-line headers (verse pādas are no longer split).
       positionPointerInstant(el);
       requestAnimationFrame(function() {
         var r = el.getBoundingClientRect();

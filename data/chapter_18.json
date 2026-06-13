@@ -3456,76 +3456,46 @@
       "shlokaNum": "",
       "entry": [
         {
-          "startTime": "5959.6",
-          "endTime": "5962.51",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "|| ओं  तत्सदिति",
-          "iast": "|| ōṃ  tatsaditi"
+          "text": "||ōṁ tatsaditi śrīmanmahābhāratē",
+          "iast": "||ōṁ tatsaditi śrīmanmahābhāratē"
         },
         {
-          "startTime": "5966.55",
-          "endTime": "5970.22",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "श्रीमद्भगवद्गीतासु",
-          "iast": "śrīmadbhagavadgītāsu"
+          "text": "śatasāhasrikāyāṁ saṁhitāyāṁ vaiyāsikyāṁ",
+          "iast": "śatasāhasrikāyāṁ saṁhitāyāṁ vaiyāsikyāṁ"
         },
         {
-          "startTime": "5975.38",
-          "endTime": "5977.01",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "उपनिषत्सु",
-          "iast": "upaniṣatsu"
+          "text": "śrīmadbhīṣmaparvaṇi śrīmadbhagavadgītāsu",
+          "iast": "śrīmadbhīṣmaparvaṇi śrīmadbhagavadgītāsu"
         },
         {
-          "startTime": "5979.3",
-          "endTime": "5982.18",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "ब्रह्मविद्यायां",
-          "iast": "brahmavidyāyāṃ"
+          "text": "upaniṣatsu brahmavidyāyāṁ yōgaśāstrē",
+          "iast": "upaniṣatsu brahmavidyāyāṁ yōgaśāstrē"
         },
         {
-          "startTime": "5985.75",
-          "endTime": "5988.5",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "योगशास्त्रे",
-          "iast": "yōgaśāstrē"
+          "text": "śrīkṛṣṇārjuna saṁvādē mōkṣasannyāsayōgōnāma",
+          "iast": "śrīkṛṣṇārjuna saṁvādē mōkṣasannyāsayōgōnāma"
         },
         {
-          "startTime": "5992.15",
-          "endTime": "5996.44",
-          "swhtsp": "l",
+          "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "श्रीकृष्णार्जुनसंवादे",
-          "iast": "śrīkṛṣṇārjunasaṃvādē"
-        },
-        {
-          "startTime": "6001.29",
-          "endTime": "6005.85",
-          "swhtsp": "l",
-          "shlNbr": "00",
-          "sty": "",
-          "text": "मोक्षसन्न्यासयोगो  नाम",
-          "iast": "mōkṣasannyāsayōgō  nāma"
-        },
-        {
-          "startTime": "6011.27",
-          "endTime": "6015.3",
-          "swhtsp": "l",
-          "shlNbr": "00",
-          "sty": "",
-          "text": "अष्टादशोऽध्यायः ||",
-          "iast": "aṣṭādaśō'dhyāyaḥ ||"
+          "text": "aṣṭādaśōdhyāyaḥ||",
+          "iast": "aṣṭādaśōdhyāyaḥ||"
         }
       ]
     },

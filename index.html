@@ -72,6 +72,9 @@ body {
   max-width: 95vw;
   text-align: left;
 }
+/* Colophon (closer) pages render center-aligned */
+#verse-container-a.centered, #verse-container-b.centered { align-items: center; }
+#verse-container-a.centered .verse-line, #verse-container-b.centered .verse-line { text-align: center; }
 .syllable {
   display: inline-block;
   position: relative;
@@ -1053,6 +1056,8 @@ const renderer = (function() {
    */
   function renderInto(target, pageData) {
     target.textContent = '';
+    // Colophon (closer) pages are center-aligned; all other pages left-aligned.
+    target.classList.toggle('centered', !!pageData.isCloser);
     const elements = [];
 
     for (const line of pageData.lines) {

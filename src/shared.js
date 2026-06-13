@@ -665,6 +665,8 @@ const renderer = (function() {
    */
   function renderInto(target, pageData) {
     target.textContent = '';
+    // Colophon (closer) pages are center-aligned; all other pages left-aligned.
+    target.classList.toggle('centered', !!pageData.isCloser);
     const elements = [];
 
     for (const line of pageData.lines) {

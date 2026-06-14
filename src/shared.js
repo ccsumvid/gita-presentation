@@ -1070,13 +1070,10 @@ const animator = (function() {
         advance();
       }, durationMs);
     } else if (el.dataset.lineEnd) {
-      // Line end (between padas): glide to right edge, honour marker beats, then pause 1 laghu
+      // Line end (between padas): rest the pointer ON the last asterisk (where the
+      // previous glide left it) — do NOT sweep past it to the line's right edge.
+      // Then honour marker beats and the line-end pause.
       positionPointerInstant(el);
-      requestAnimationFrame(function() {
-        var r = el.getBoundingClientRect();
-        pointer.style.transition = 'left ' + (durationMs / 1000) + 's linear';
-        pointer.style.left = (r.right - 18) + 'px';
-      });
       timeoutId = setTimeout(function() {
         el.classList.remove('active');
         el.classList.add('done');

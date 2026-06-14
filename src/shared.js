@@ -759,23 +759,28 @@ const renderer = (function() {
           lineDiv.appendChild(span);
         }
       } else {
-        // Asterisk mode: show one asterisk per syllable using the prosody engine.
-        // Each entry (pada) renders as a single line -- no mid-pada splitting --
-        // and fitLines() shrinks any overflow, matching the reference deck and
-        // the web build (feedback #10-19 Dhyana line mixups).
+        // Asterisk mode: one asterisk per syllable. For EVEN pointer movement,
+        // every syllable carries the line's AVERAGE beat value (not its own
+        // guru/laghu weight), so the hand glides at a constant rate across all
+        // asterisks while the line's total time \u2014 and thus the set tempo \u2014 is
+        // preserved. Markers (dandas) keep their own beats for the line-end pause.
         const tokens = analyzer.analyzeLine(analyzeText);
+        const sylToks = tokens.filter(t => !t.isMarker);
+        const avgBeats = sylToks.length
+          ? (sylToks.reduce((s, t) => s + t.beats, 0) / sylToks.length)
+          : 1;
 
-        // Single-line rendering (one asterisk per syllable, markers inline)
         for (let ti = 0; ti < tokens.length; ti++) {
           const token = tokens[ti];
           const span = document.createElement('span');
-          span.dataset.beats = token.beats;
 
           if (token.isMarker) {
+            span.dataset.beats = token.beats;
             span.className = 'verse-marker';
             span.textContent = token.text;
             elements.push(span);
           } else {
+            span.dataset.beats = avgBeats;
             span.className = 'syllable';
             span.dataset.index = elements.length;
             span.textContent = '\u2731';
@@ -1038,10 +1043,13 @@ const animator = (function() {
     el.classList.add('active');
     if (onSyllableChange) onSyllableChange(currentIndex, 'active');
 
-    // Even pointer movement: every syllable advances over one beat regardless of
-    // its guru/laghu weight, so the hand glides evenly across all asterisks. Total
-    // time for a line is therefore driven by its syllable count (its length).
-    const durationMs = getBeatMs();
+    // Per-element duration from its beat value. In asterisk mode each syllable
+    // carries the line's AVERAGE beats (set at render time), so the hand glides
+    // EVENLY across all asterisks while the line's total time (the set tempo) is
+    // preserved. In English mode the single line-span carries the line's total
+    // beats. parseFloat because averaged beats can be fractional.
+    const beats = parseFloat(el.dataset.beats) || 1;
+    const durationMs = beats * getBeatMs();
 
     // Find the next non-marker syllable
     var nextIdx = currentIndex + 1;
@@ -1165,13 +1173,12 @@ const animator = (function() {
       isPlaying = true;
       if (btnPlay) btnPlay.disabled = true;
       if (btnPause) btnPause.disabled = false;
-      // Even movement: the current syllable resumes over one beat (not its
-      // guru/laghu weight), plus any line-end pause.
+      var beats = parseFloat(elems[currentIndex].dataset.beats) || 1;
       var lineEndPause = 0;
       if (elems[currentIndex].dataset.lineEnd) {
         lineEndPause = dataLayer.getCurrentChapterId() === '0' ? 1 : LINE_END_PAUSE_BEATS;
       }
-      timeoutId = setTimeout(advance, (1 + lineEndPause) * getBeatMs());
+      timeoutId = setTimeout(advance, (beats + lineEndPause) * getBeatMs());
     } else if (currentIndex < 0) {
       hidePointer();
     }

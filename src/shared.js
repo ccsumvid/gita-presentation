@@ -20,6 +20,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "1",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"14.2367","endTime":"27.7249","swhtsp":"l","shlNbr":"00","sty":"","text":"ओं  पार्थाय  प्रतिबोधितां   भगवता","iast":"ōṃ  pārthāya  pratibōdhitāṃ   bhagavatā"},
         {"startTime":"14.2367","endTime":"27.7249","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"नारायणेन  स्वयं","iast":"nārāyaṇēna  svayaṃ"},
@@ -33,6 +34,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "2",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"64.4702","endTime":"77.0441","swhtsp":"l","shlNbr":"00","sty":"","text":"नमोऽस्तुते  व्यास  विशालबुद्धे","iast":"namō'stutē  vyāsa  viśālabuddhē"},
         {"startTime":"64.4702","endTime":"77.0441","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"फुल्लारविन्दायतपत्रनेत्र |","iast":"phullāravindāyatapatranētra |"},
@@ -42,6 +44,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "3",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"90.6188","endTime":"99.5878","swhtsp":"l","shlNbr":"00","sty":"","text":"प्रपन्नपारिजाताय","iast":"prapannapārijātāya"},
         {"startTime":"90.6188","endTime":"99.5878","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"तोत्रवेत्रैकपाणये |","iast":"tōtravētraikapāṇayē |"},
@@ -51,6 +54,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "4",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"110.629","endTime":"119.519","swhtsp":"l","shlNbr":"00","sty":"","text":"वसुदेवसुतं  देवं","iast":"vasudēvasutaṃ  dēvaṃ"},
         {"startTime":"110.629","endTime":"119.519","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"कंसचाणूरमर्दनम् |","iast":"kaṃsacāṇūramardanam |"},
@@ -60,6 +64,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "5",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"130.926","endTime":"142.037","swhtsp":"l","shlNbr":"00","sty":"","text":"भीष्मद्रोणतटा  जयद्रथजला","iast":"bhīṣmadrōṇataṭā  jayadrathajalā"},
         {"startTime":"130.926","endTime":"142.037","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"गान्धारनीलोत्पला","iast":"gāndhāranīlōtpalā"},
@@ -73,6 +78,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "6",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"175.595","endTime":"185.635","swhtsp":"l","shlNbr":"00","sty":"","text":"पाराशर्यवचः  सरोजममलं","iast":"pārāśaryavacaḥ  sarōjamamalaṃ"},
         {"startTime":"175.595","endTime":"185.635","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"गीतार्थगन्धोत्कटं","iast":"gītārthagandhōtkaṭaṃ"},
@@ -86,6 +92,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "7",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"218.723","endTime":"226.700","swhtsp":"l","shlNbr":"00","sty":"","text":"मूकं  करोति  वाचालं","iast":"mūkaṃ  karōti  vācālaṃ"},
         {"startTime":"218.723","endTime":"226.700","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"पङ्गुं  लङ्घयते  गिरिम् |","iast":"paṅguṃ  laṅghayatē  girim |"},
@@ -95,6 +102,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "8",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"236.251","endTime":"244.280","swhtsp":"l","shlNbr":"00","sty":"","text":"शान्ताकारं  भुजगशयनं","iast":"śāntākāraṃ  bhujagaśayanaṃ"},
         {"startTime":"236.251","endTime":"244.280","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"पद्मनाभं  सुरेशं","iast":"padmanābhaṃ  surēśaṃ"},
@@ -108,6 +116,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "9",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"269.322","endTime":"279.284","swhtsp":"l","shlNbr":"00","sty":"","text":"यं  ब्रह्मावरुणेन्द्ररुद्रमरुतः","iast":"yaṃ  brahmāvaruṇēndrarudramarutaḥ"},
         {"startTime":"269.322","endTime":"279.284","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"स्तुन्वन्ति  दिव्यैः  स्तवैः","iast":"stunvanti  divyaiḥ  stavaiḥ"},
@@ -121,6 +130,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "10",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"311.38","endTime":"319.042","swhtsp":"l","shlNbr":"00","sty":"","text":"नारायणं  नमस्कृत्य","iast":"nārāyaṇaṃ  namaskṛtya"},
         {"startTime":"311.38","endTime":"319.042","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"नरञ्चैव  नरोत्तमम् |","iast":"narañcaiva  narōttamam |"},
@@ -130,6 +140,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "11",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"328.829","endTime":"337.798","swhtsp":"l","shlNbr":"00","sty":"","text":"सच्चिदानन्दरूपाय","iast":"saccidānandarūpāya"},
         {"startTime":"328.829","endTime":"337.798","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"कृष्णायाक्लिष्टकारिणे |","iast":"kṛṣṇāyākliṣṭakāriṇē |"},
@@ -139,6 +150,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "12",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"347.664","endTime":"357.129","swhtsp":"l","shlNbr":"00","sty":"","text":"सर्वोपनिषदो  गावः","iast":"sarvōpaniṣadō  gāvaḥ"},
         {"startTime":"347.664","endTime":"357.129","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"दोग्धा  गोपालनन्दनः |","iast":"dōgdhā  gōpālanandanaḥ |"},
@@ -148,6 +160,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "13",
+      "meter": "anustubh",
       "entry": [
         {"startTime":"368.353","endTime":"377.635","swhtsp":"l","shlNbr":"00","sty":"","text":"गीताशास्त्रमिदं  पुण्यं","iast":"gītāśāstramidaṃ  puṇyaṃ"},
         {"startTime":"368.353","endTime":"377.635","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"यः  पठेत्   प्रयतः  पुमान् |","iast":"yaḥ  paṭhēt   prayataḥ  pumān |"},
@@ -157,6 +170,7 @@ const EMBEDDED_DHYANA = {
     },
     {
       "shlokaNum": "14",
+      "meter": "tristubh",
       "entry": [
         {"startTime":"387.5","endTime":"399.405","swhtsp":"l","shlNbr":"00","sty":"","text":"एकं  शास्त्रं  देवकीपुत्रगीतं","iast":"ēkaṃ  śāstraṃ  dēvakīputragītaṃ"},
         {"startTime":"387.5","endTime":"399.405","swhtsp":"l","shlNbr":"00","sty":"","cont":true,"text":"एको  देवो  देवकीपुत्र  एव |","iast":"ēkō  dēvō  dēvakīputra  ēva |"},
@@ -831,16 +845,28 @@ const renderer = (function() {
         }
       }
 
+      // Issue #26: speaker labels ("arjuna uvāca -", "śrī bhagavānuvāca -",
+      // "sañjaya uvāca -") must flow into the following verse with NO line-end
+      // pause. Tag the line's last syllable with splitEnd (the animator advances
+      // with no pause) instead of the normal lineEnd + pause.
+      // Speaker labels end with a trailing dash — that distinguishes them from
+      // verse lines that merely contain "uvāca" (e.g. "uvāca madhusūdanaḥ ||1||").
+      var lblIast = line.iast || '', lblText = line.text || '';
+      var isUvaca = (/uvāca/.test(lblIast) && /-\s*$/.test(lblIast)) ||
+                    (/उवाच/.test(lblText) && /-\s*$/.test(lblText));
       for (let i = elements.length - 1; i >= lineStartIndex; i--) {
         if (!elements[i].classList.contains('verse-marker')) {
-          elements[i].dataset.lineEnd = '1';
-          // Meter-aware line-end pause (Issues 2 & 5):
-          //   Dhyana (chapter '0'): 3 mātrās per line.
-          //   triṣṭubh verses: 4 mātrās; anuṣṭubh (default): 3 mātrās.
-          var lineEndBeats = (dataLayer.getCurrentChapterId() === '0')
-            ? '3'
-            : (pageData.meter === 'tristubh' ? '4' : '3');
-          elements[i].dataset.lineEndPauseBeats = lineEndBeats;
+          if (isUvaca) {
+            elements[i].dataset.splitEnd = '1';
+          } else {
+            elements[i].dataset.lineEnd = '1';
+            // Meter-aware line-end pause (Issues #20/#21):
+            //   triṣṭubh verses: 4 mātrās; anuṣṭubh (default): 3 mātrās.
+            //   Dhyana (chapter '0') now carries per-shloka meter too, so it
+            //   uses the same rule (no flat-3 special case).
+            var lineEndBeats = (pageData.meter === 'tristubh' ? '4' : '3');
+            elements[i].dataset.lineEndPauseBeats = lineEndBeats;
+          }
           break;
         }
       }

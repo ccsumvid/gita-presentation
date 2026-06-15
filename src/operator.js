@@ -346,15 +346,27 @@
       if (chapterId === 'datta_stavam') return; // stay paused on the last page
 
       // Inter-chapter gap, then countdown, then play (feedback #5).
+      // Issue #29: the countdown ("Listen to Śruti") must precede the chapter's
+      // first header line ("Oṃ Śrī Paramātmanē Namaḥ"). Load the next chapter
+      // with the projector BLANKED (blankProjector=true) so the fh header stays
+      // hidden behind the countdown overlay and is only revealed when the
+      // countdown completes and play begins on page 0 (the fh header).
       var gapMs = chantSettings.chapterGapSeconds * 1000;
       setTimeout(async function() {
         dismissInstruction();
-        await nextPage(); // crosses into next chapter
+        var nextId = dataLayer.getNextChapterId();
+        if (!nextId) return; // no next chapter — stay stopped
+        await loadChapter(nextId, true); // crosses into next chapter, blanked
         var newChapter = dataLayer.getCurrentChapterId();
         if (newChapter === chapterId) return; // chapter load failed — stay stopped
         // Landed on a heading-only title section: show the title and stay (no countdown/play).
-        if (newChapter === 'gita_saram' || newChapter === 'gita_arati') return;
+        if (newChapter === 'gita_saram' || newChapter === 'gita_arati') {
+          syncProjectorPage(); // reveal the title (loadChapter blanked it)
+          return;
+        }
         startCountdown(function() {
+          // Reveal page 0 (fh header) and animate it as chanting begins.
+          syncProjectorPage();
           animator.play();
         });
       }, gapMs);

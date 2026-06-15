@@ -84,7 +84,9 @@
           "text": "तन्मे  ब्रूहि  सुनिश्चितम् ||1||",
           "iast": "tanmē  brūhi  suniścitam ||1||"
         }
-      ]
+      ],
+      "syllables": 39,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "2",
@@ -134,7 +136,9 @@
           "text": "कर्मयोगो  विशिष्यते ||2||",
           "iast": "karmayōgō  viśiṣyatē ||2||"
         }
-      ]
+      ],
+      "syllables": 40,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "3",
@@ -175,7 +179,9 @@
           "text": "सुखं  बन्धात्प्रमुच्यते ||3||",
           "iast": "sukhaṃ  bandhātpramucyatē ||3||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "4",
@@ -216,7 +222,9 @@
           "text": "उभयोर्विन्दते  फलम् ||4||",
           "iast": "ubhayōrvindatē  phalam ||4||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "5",
@@ -257,7 +265,9 @@
           "text": "यः  पश्यति  स  पश्यति ||5||",
           "iast": "yaḥ  paśyati  sa  paśyati ||5||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "6",
@@ -298,7 +308,9 @@
           "text": "नचिरेणाधिगच्छति ||6||",
           "iast": "nacirēṇādhigacchati ||6||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "7",
@@ -339,7 +351,9 @@
           "text": "कुर्वन्नपि  न  लिप्यते ||7||",
           "iast": "kurvannapi  na  lipyatē ||7||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "8",
@@ -389,7 +403,9 @@
           "text": "पश्यन्शृण्वन् स्पृशञ्जिघ्रन्",
           "iast": "paśyanśṛṇvan spṛśañjighran"
         }
-      ]
+      ],
+      "syllables": 45,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "9",
@@ -439,7 +455,9 @@
           "text": "प्रलपन् विसृजन् गृह्णन्",
           "iast": "pralapan visṛjan gṛhṇan"
         }
-      ]
+      ],
+      "syllables": 45,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "10",
@@ -480,7 +498,9 @@
           "text": "पद्मपत्रमिवाम्भसा ||10||",
           "iast": "padmapatramivāmbhasā ||10||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "11",
@@ -521,7 +541,9 @@
           "text": "सङ्गं  त्यक्त्वात्मशुद्धये ||11||",
           "iast": "saṅgaṃ  tyaktvātmaśuddhayē ||11||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "12",
@@ -562,7 +584,9 @@
           "text": "फले  सक्तो  निबध्यते ||12||",
           "iast": "phalē  saktō  nibadhyatē ||12||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "13",
@@ -603,7 +627,9 @@
           "text": "नैव  कुर्वन्न  कारयन् ||13||",
           "iast": "naiva  kurvanna  kārayan ||13||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "14",
@@ -644,7 +670,9 @@
           "text": "स्वभावस्तु  प्रवर्तते ||14||",
           "iast": "svabhāvastu  pravartatē ||14||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "15",
@@ -685,7 +713,9 @@
           "text": "तेन  मुह्यन्ति   जन्तवः ||15||",
           "iast": "tēna  muhyanti   jantavaḥ ||15||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "16",
@@ -726,7 +756,9 @@
           "text": "प्रकाशयति  तत्परम् ||16||",
           "iast": "prakāśayati  tatparam ||16||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "17",
@@ -767,7 +799,9 @@
           "text": "ज्ञाननिर्धूतकल्मषाः ||17||",
           "iast": "jñānanirdhūtakalmaṣāḥ ||17||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "18",
@@ -808,7 +842,9 @@
           "text": "पण्डिताः  समदर्शिनः ||18||",
           "iast": "paṇḍitāḥ  samadarśinaḥ ||18||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "19",
@@ -849,7 +885,9 @@
           "text": "तस्मात्  ब्रह्मणि  ते  स्थिताः ||19||",
           "iast": "tasmāt  brahmaṇi  tē  sthitāḥ ||19||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "20",
@@ -890,7 +928,9 @@
           "text": "ब्रह्मवित्  ब्रह्मणि  स्थितः ||20||",
           "iast": "brahmavit  brahmaṇi  sthitaḥ ||20||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "21",
@@ -940,7 +980,9 @@
           "text": "विन्दत्यात्मनि  यत् सुखम् |",
           "iast": "vindatyātmani  yat sukham |"
         }
-      ]
+      ],
+      "syllables": 43,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "22",
@@ -981,7 +1023,9 @@
           "text": "न  तेषु  रमते  बुधः ||22||",
           "iast": "na  tēṣu  ramatē  budhaḥ ||22||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "23",
@@ -1031,7 +1075,9 @@
           "text": "प्राक् शरीरविमोक्षणात् |",
           "iast": "prāk śarīravimōkṣaṇāt |"
         }
-      ]
+      ],
+      "syllables": 43,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "24",
@@ -1072,7 +1118,9 @@
           "text": "ब्रह्मभूतोऽधिगच्छति ||24||",
           "iast": "brahmabhūtō'dhigacchati ||24||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "25",
@@ -1113,7 +1161,9 @@
           "text": "सर्वभूतहिते  रताः ||25||",
           "iast": "sarvabhūtahitē  ratāḥ ||25||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "26",
@@ -1154,7 +1204,9 @@
           "text": "वर्तते  विदितात्मनाम् ||26||",
           "iast": "vartatē  viditātmanām ||26||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "27",
@@ -1204,7 +1256,9 @@
           "text": "स्पर्शान् कृत्वा बहिर्बाह्यान्",
           "iast": "sparśān kṛtvā bahirbāhyān"
         }
-      ]
+      ],
+      "syllables": 43,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "28",
@@ -1245,7 +1299,9 @@
           "text": "यः  सदा  मुक्त  एव  सः ||28||",
           "iast": "yaḥ  sadā  mukta  ēva  saḥ ||28||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "29",
@@ -1286,7 +1342,9 @@
           "text": "ज्ञात्वा  मां शान्तिमृच्छति ||29||",
           "iast": "jñātvā  māṃ śāntimṛcchati ||29||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "",
@@ -1363,7 +1421,9 @@
           "text": "पञ्चमोऽध्यायः ||",
           "iast": "pañcamō'dhyāyaḥ ||"
         }
-      ]
+      ],
+      "syllables": 49,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "sarvadharmān",
@@ -1404,7 +1464,9 @@
           "text": "मोक्षयिष्यामि मा शुचः ||",
           "iast": "mōkṣayiṣyāmi mā śucaḥ ||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     }
   ]
 }

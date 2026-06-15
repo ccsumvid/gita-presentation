@@ -84,7 +84,9 @@
           "text": "स्वाध्यायस्तप  आर्जवम् ||1||",
           "iast": "svādhyāyastapa  ārjavam ||1||"
         }
-      ]
+      ],
+      "syllables": 40,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "2",
@@ -125,7 +127,9 @@
           "text": "मार्दवं  ह्रीरचापलम् ||2||",
           "iast": "mārdavaṃ  hrīracāpalam ||2||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "3",
@@ -166,7 +170,9 @@
           "text": "अभिजातस्य  भारत ||3||",
           "iast": "abhijātasya  bhārata ||3||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "4",
@@ -207,7 +213,9 @@
           "text": "पार्थ  सम्पदमासुरीम् ||4||",
           "iast": "pārtha  sampadamāsurīm ||4||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "5",
@@ -248,7 +256,9 @@
           "text": "अभिजातोऽसि  पाण्डव ||5||",
           "iast": "abhijātō'si  pāṇḍava ||5||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "6",
@@ -289,7 +299,9 @@
           "text": "आसुरं पार्थ  मे  शृणु ||6||",
           "iast": "āsuraṃ pārtha  mē  śṛṇu ||6||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "7",
@@ -330,7 +342,9 @@
           "text": "न सत्यं  तेषु  विद्यते ||7||",
           "iast": "na satyaṃ  tēṣu  vidyatē ||7||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "8",
@@ -371,7 +385,9 @@
           "text": "किमन्यत्कामहैतुकम् ||8||",
           "iast": "kimanyatkāmahaitukam ||8||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "9",
@@ -412,7 +428,9 @@
           "text": "क्षयाय  जगतोऽहिताः ||9||",
           "iast": "kṣayāya  jagatō'hitāḥ ||9||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "10",
@@ -453,7 +471,9 @@
           "text": "प्रवर्तन्तेऽशुचिव्रताः  ||10||",
           "iast": "pravartantē'śucivratāḥ  ||10||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "11",
@@ -494,7 +514,9 @@
           "text": "एतावदिति  निश्चिताः ||11||",
           "iast": "ētāvaditi  niścitāḥ ||11||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "12",
@@ -535,7 +557,9 @@
           "text": "अन्यायेनार्थसञ्चयान् ||12||",
           "iast": "anyāyēnārthasañcayān ||12||"
         }
-      ]
+      ],
+      "syllables": 34,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "13",
@@ -576,7 +600,9 @@
           "text": "भविष्यति  पुनर्धनम् ||13||",
           "iast": "bhaviṣyati  punardhanam ||13||"
         }
-      ]
+      ],
+      "syllables": 35,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "14",
@@ -617,7 +643,9 @@
           "text": "सिद्धोऽहं  बलवान्सुखी ||14||",
           "iast": "siddhō'haṃ  balavānsukhī ||14||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "15",
@@ -658,7 +686,9 @@
           "text": "इत्यज्ञानविमोहिताः ||15||",
           "iast": "ityajñānavimōhitāḥ ||15||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "16",
@@ -699,7 +729,9 @@
           "text": "पतन्ति  नरकेऽशुचौ ||16||",
           "iast": "patanti  narakē'śucau ||16||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "17",
@@ -740,7 +772,9 @@
           "text": "दम्भेनाविधिपूर्वकम् ||17||",
           "iast": "dambhēnāvidhipūrvakam ||17||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "18",
@@ -781,7 +815,9 @@
           "text": "प्रद्विषन्तोऽभ्यसूयकाः ||18||",
           "iast": "pradviṣantō'bhyasūyakāḥ ||18||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "19",
@@ -822,7 +858,9 @@
           "text": "आसुरीष्वेव योनिषु ||19||",
           "iast": "āsurīṣvēva yōniṣu ||19||"
         }
-      ]
+      ],
+      "syllables": 35,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "20",
@@ -863,7 +901,9 @@
           "text": "ततो यान्त्यधमां  गतिम् ||20||",
           "iast": "tatō yāntyadhamāṃ  gatim ||20||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "21",
@@ -904,7 +944,9 @@
           "text": "तस्मादेतत्त्रयं  त्यजेत् ||21||",
           "iast": "tasmādētattrayaṃ  tyajēt ||21||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "22",
@@ -945,7 +987,9 @@
           "text": "ततो  याति परां गतिम् ||22||",
           "iast": "tatō  yāti parāṃ gatim ||22||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "23",
@@ -986,7 +1030,9 @@
           "text": "न सुखं न  परां गतिम् ||23||",
           "iast": "na sukhaṃ na  parāṃ gatim ||23||"
         }
-      ]
+      ],
+      "syllables": 33,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "24",
@@ -1027,7 +1073,9 @@
           "text": "कर्म  कर्तुमिहार्हसि ||24||",
           "iast": "karma  kartumihārhasi ||24||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "",
@@ -1104,7 +1152,9 @@
           "text": "षोडशोऽध्यायः ||",
           "iast": "ṣōḍaśō'dhyāyaḥ ||"
         }
-      ]
+      ],
+      "syllables": 53,
+      "meter": "anustubh"
     },
     {
       "shlokaNum": "sarvadharmān",
@@ -1145,7 +1195,9 @@
           "text": "मोक्षयिष्यामि मा शुचः ||",
           "iast": "mōkṣayiṣyāmi mā śucaḥ ||"
         }
-      ]
+      ],
+      "syllables": 32,
+      "meter": "anustubh"
     }
   ]
 }

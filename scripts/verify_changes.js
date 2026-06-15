@@ -74,12 +74,16 @@ section('3. Samarpana (kshama_prarthana.json)');
   const k = loadJSON('kshama_prarthana.json');
   if (k) {
     check(k.name === 'samarpaṇa', 'renamed to samarpaṇa');
-    check(JSON.stringify(k.shloka.map(s => String(s.shlokaNum))) === JSON.stringify(['1','2','3','4','6']), 'shlokas [1,2,3,4,6]');
+    // shloka 4 is now split into two objects: line1 (repeat:3) + line2 (once) → [1,2,3,4,4,6]
+    check(JSON.stringify(k.shloka.map(s => String(s.shlokaNum))) === JSON.stringify(['1','2','3','4','4','6']), 'shlokas [1,2,3,4,4,6] (slide-4 split)');
     const s2 = k.shloka.find(s => String(s.shlokaNum) === '2');
     check(s2 && !s2.entry.some(e => (e.iast || '') === 'kṣamā prārthanā'), 'shloka 2 has no kṣamā prārthanā line');
-    const s4 = k.shloka.find(s => String(s.shlokaNum) === '4');
-    check(s4 && s4.repeat === 3, 'shloka 4 repeat:3');
-    check(s4 && !/\(x\s*3\)/.test(JSON.stringify(s4.entry)), 'shloka 4 no (x 3) marker');
+    const fours = k.shloka.filter(s => String(s.shlokaNum) === '4');
+    check(fours.length === 2, 'shloka 4 split into two objects');
+    const s4a = fours[0], s4b = fours[1];
+    check(s4a && s4a.repeat === 3 && /acyutāya namaḥ/.test(s4a.entry[0].iast || ''), 'shloka 4 line1 (acyutāya namaḥ) repeat:3');
+    check(s4b && !s4b.repeat && /acyutānantagōvindēbhyō/.test(s4b.entry[0].iast || ''), 'shloka 4 line2 once, no repeat');
+    check(fours.every(s => !/\(x\s*3\)/.test(JSON.stringify(s.entry))), 'no (x 3) marker');
     check(!k.shloka.some(s => /pūrṇamadaḥ/.test(JSON.stringify(s.entry))), 'pūrṇam mantra removed');
   }
 }
@@ -147,30 +151,41 @@ section('7. Page labels + repeat expansion');
   if (c17) check(groupIntoPages(c17.shloka).filter(p => p.isCloser).length === 1, 'Ch17 one colophon (17.23 not false-tagged)');
   const k = loadJSON('kshama_prarthana.json');
   if (k) {
-    const passes = groupIntoPages(k.shloka).filter(p => p.shlokaNum === '4');
-    check(passes.length === 3, 'Samarpana shloka 4 -> 3 pages');
-    check(passes.map(p => pageLabel(p, 0)).join(',') === 'Shloka 4 (1/3),Shloka 4 (2/3),Shloka 4 (3/3)', 'passes labelled (1/3)(2/3)(3/3)');
+    const fourPages = groupIntoPages(k.shloka).filter(p => p.shlokaNum === '4');
+    // line1 (repeat:3) → 3 labelled pages, then line2 → 1 page = 4 pages total
+    check(fourPages.length === 4, 'Samarpana shloka 4 -> 4 pages (line1 ×3 + line2 ×1)');
+    check(fourPages.slice(0, 3).map(p => pageLabel(p, 0)).join(',') === 'Shloka 4 (1/3),Shloka 4 (2/3),Shloka 4 (3/3)', 'line1 passes labelled (1/3)(2/3)(3/3)');
+    check(fourPages[3] && fourPages[3].repeatTotal === 1, 'line2 shown once (no repeat)');
   }
 }
 
-section('8. Animator pause model (src/shared.js)');
+section('8. Animator pause model — data-driven (QA #36 issues 1,2,5)');
 {
   const s = readSrc('src/shared.js');
-  check(/let\s+LINE_END_PAUSE_BEATS\s*=\s*2/.test(s), 'LINE_END_PAUSE_BEATS mutable let = 2');
-  check(/let\s+SLOKA_END_PAUSE_MS\s*=\s*30/.test(s), 'SLOKA_END_PAUSE_MS mutable let = 30');
-  check(/function setChantConfig/.test(s), 'setChantConfig defined');
-  check(/getCurrentChapterId\(\)\s*===\s*'0'/.test(s), "Dhyana ('0') exception present");
-  check(/LINE_END_PAUSE_BEATS\s*\*\s*getBeatMs\(\)/.test(s), 'non-dhyana line-end = 2 matras');
-  check(/LINE_END_PAUSE_BEATS/.test(readSrc('index.html')), 'index.html applies 2-matra pause too');
+  const idx = readSrc('index.html');
+  check(/const\s+LINE_END_PAUSE_BEATS\s*=\s*3/.test(s), 'LINE_END_PAUSE_BEATS fallback = 3');
+  check(!/SLOKA_END_PAUSE_MS/.test(s), 'SLOKA_END_PAUSE_MS removed');
+  // data-driven line-end pause hook in the animator
+  check(/parseFloat\(el\.dataset\.lineEndPauseBeats\)/.test(s), 'animator reads dataset.lineEndPauseBeats (shared.js)');
+  check(/parseFloat\(el\.dataset\.lineEndPauseBeats\)/.test(idx), 'animator reads dataset.lineEndPauseBeats (index.html)');
+  // header lines get a 3-mātrā pause (Issue 1); verse lines tristubh→4 else 3 (Issue 2)
+  check(/dataset\.lineEndPauseBeats\s*=\s*'3'/.test(s), 'header line pause = 3 (shared.js)');
+  check(/tristubh'\s*\?\s*'4'\s*:\s*'3'/.test(s), 'verse pause tristubh→4 else 3 (shared.js)');
+  check(/tristubh'\s*\?\s*'4'\s*:\s*'3'/.test(idx), 'verse pause tristubh→4 else 3 (index.html)');
+  // even pointer movement (per-line average beats) retained
+  check(/avgBeats/.test(s) && /parseFloat\(el\.dataset\.beats\)/.test(s), 'even-movement avg beats retained (shared.js)');
 }
 
 section('9. Operator settings panel');
 {
   const op = readSrc('src/operator.js');
   check(/CHANT_DEFAULTS\s*=/.test(op), 'CHANT_DEFAULTS defined');
-  for (const k of ['lineEndPauseBeats','dhyanaSlokaEndMs','colophonBpmDrop','countdownSeconds','chapterGapSeconds','sectionBpm']) check(new RegExp(k).test(op), 'CHANT_DEFAULTS has ' + k);
+  // line-pause + dhyana-sloka-end settings were removed (now data-driven)
+  for (const k of ['colophonBpmDrop','countdownSeconds','chapterGapSeconds','sectionBpm']) check(new RegExp(k).test(op), 'CHANT_DEFAULTS has ' + k);
+  check(!/lineEndPauseBeats\s*:/.test(op), 'line-end-pause setting key removed (now data-driven)');
+  check(!/dhyanaSlokaEndMs\s*:/.test(op), 'dhyana-sloka-end setting key removed');
+  check(!/id="set-line-end"/.test(readSrc('src/operator.html')), 'line-end-pause input removed from panel');
   check(/gitaChantSettings/.test(op), 'persists to localStorage gitaChantSettings');
-  check(/animator\.setChantConfig/.test(op), 'applies pause config to animator');
   check(!/var\s+count\s*=\s*5\b/.test(op), 'countdown not hardcoded to 5');
   check(!/COLOPHON_BPM_DROP\s*=\s*20/.test(op), 'colophon drop not hardcoded const');
   check(/id="settings-overlay"/.test(readSrc('src/operator.html')), 'settings panel markup present');

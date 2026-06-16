@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.10.2] - 2026-06-16
+
+Parayana QA issues #19–#35 (GitHub).
+
+### Added
+- **Gita Sāram & Gita Ārati lyrics restored** (#33) with the full verses (sourced/corrected from the reference PDF), for practice use.
+- **Gita Sāram repetition** (#28): the 4th pāda of slokas 3 & 4 repeat ×2, the closing Pallavi repeats ×2, and the Pallavi's 4th pāda repeats ×4.
+- **Verse zoom** setting (#34): operator-controlled projector text zoom (50–250%), persisted.
+- **Datta Stavam** now ends with the gaṇēśāya invocation slide (#31).
+
+### Changed
+- **Dhyana line pauses are now meter-aware** (#20/#21): 3 mātrās for anuṣṭubh shlokas, 4 for triṣṭubh (matching the rest of the chapters).
+- **No pause after "uvāca" speaker labels** (#26) — they flow into the verse.
+- **Countdown now precedes the chapter header** "Oṃ Śrī Paramātmanē Namaḥ" (#29).
+- **Chapter titles are spaced** for chanting flow, e.g. "arjuna viṣāda yōgaḥ" (#30).
+- **Gita Mahatmyam** re-lined to a 4-line-per-sloka layout per the English script (#35).
+
+### Fixed
+- Textual notation corrected in several slokas vs the reference PDF (#27): 2.40, 5.27, 6.14, 9.31.
+
 ## [0.10.1] - 2026-06-15
 
 Parayana QA fixes (issue #36) + pointer refinements.

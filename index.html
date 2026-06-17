@@ -1185,10 +1185,8 @@ const renderer = (function() {
         }
       }
 
-      // Issue #26: speaker labels ("arjuna uvāca -", "śrī bhagavānuvāca -",
-      // "sañjaya uvāca -") must flow into the following verse with NO line-end
-      // pause. Tag the line's last syllable with splitEnd (the animator advances
-      // with no pause) instead of the normal lineEnd + pause.
+      // Speaker labels ("arjuna uvāca -", "śrī bhagavānuvāca -", "sañjaya uvāca -")
+      // pause 2 mātrās (one guru) at the line end before the verse begins.
       // Speaker labels end with a trailing dash — that distinguishes them from
       // verse lines that merely contain "uvāca" (e.g. "uvāca madhusūdanaḥ ||1||").
       var lblIast = line.iast || '', lblText = line.text || '';
@@ -1196,10 +1194,11 @@ const renderer = (function() {
                     (/उवाच/.test(lblText) && /-\s*$/.test(lblText));
       for (let i = elements.length - 1; i >= lineStartIndex; i--) {
         if (!elements[i].classList.contains('verse-marker')) {
+          elements[i].dataset.lineEnd = '1';
           if (isUvaca) {
-            elements[i].dataset.splitEnd = '1';
+            // Uvāca speaker label end: 2 mātrās (one guru).
+            elements[i].dataset.lineEndPauseBeats = '2';
           } else {
-            elements[i].dataset.lineEnd = '1';
             // Meter-aware line-end pause (Issues #20/#21):
             //   triṣṭubh verses: 4 mātrās; anuṣṭubh (default): 3 mātrās.
             //   Dhyana (chapter '0') now carries per-shloka meter too, so it

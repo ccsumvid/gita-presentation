@@ -210,8 +210,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "प्रेतान्भूतगणांश्चान्ये",
-          "iast": "prētānbhūtagaṇāṃścānyē"
+          "text": "प्रेतान् भूतगणांश्चान्ये",
+          "iast": "prētān bhūtagaṇāṃścānyē"
         },
         {
           "startTime": "312.921",
@@ -305,8 +305,8 @@
           "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "तान्विद्ध्यासुरनिश्चयान् ||6||",
-          "iast": "tānviddhyāsuraniścayān ||6||"
+          "text": "तान् विद्ध्यासुरनिश्चयान् ||6||",
+          "iast": "tān viddhyāsuraniścayān ||6||"
         }
       ],
       "syllables": 33,
@@ -364,8 +364,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "आयुःसत्त्वबलारोग्य-",
-          "iast": "āyuḥsattvabalārōgya-"
+          "text": "आयुस्सत्त्वबलारोग्य-",
+          "iast": "āyussattvabalārōgya-"
         },
         {
           "startTime": "588.300",
@@ -404,11 +404,20 @@
         {
           "startTime": "667.272",
           "endTime": "675.379",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "कट्वम्ललवणात्युष्ण-",
+          "iast": "kaṭvamlalavaṇātyuṣṇa-"
+        },
+        {
+          "startTime": "667.272",
+          "endTime": "675.379",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "कट्वम्ललवणात्युष्ण-तीक्ष्णरूक्षविदाहिनः |",
-          "iast": "kaṭvamlalavaṇātyuṣṇa-tīkṣṇarūkṣavidāhinaḥ |"
+          "text": "तीक्ष्णरूक्षविदाहिनः |",
+          "iast": "tīkṣṇarūkṣavidāhinaḥ |"
         },
         {
           "startTime": "686.132",
@@ -610,11 +619,20 @@
         {
           "startTime": "1046.05",
           "endTime": "1054.05",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "देवद्विजगुरुप्राज्ञ-",
+          "iast": "dēvadvijaguruprājña-"
+        },
+        {
+          "startTime": "1046.05",
+          "endTime": "1054.05",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "देवद्विजगुरुप्राज्ञ-पूजनं शौचमार्जवम् |",
-          "iast": "dēvadvijaguruprājña-pūjanaṃ śaucamārjavam |"
+          "text": "पूजनं शौचमार्जवम् |",
+          "iast": "pūjanaṃ śaucamārjavam |"
         },
         {
           "startTime": "1063.29",
@@ -690,8 +708,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "मनः  प्रसादः  सौम्यत्वं",
-          "iast": "manaḥ  prasādaḥ  saumyatvaṃ"
+          "text": "मनःप्रसादः  सौम्यत्वं",
+          "iast": "manaḥprasādaḥ  saumyatvaṃ"
         },
         {
           "startTime": "1206.2",
@@ -742,8 +760,8 @@
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "तपस्तत्त्रिविधं  नरैः |",
-          "iast": "tapastattrividhaṃ  naraiḥ |"
+          "text": "तपस्तत् त्रिविधं  नरैः |",
+          "iast": "tapastat trividhaṃ  naraiḥ |"
         },
         {
           "startTime": "1290.97",
@@ -992,7 +1010,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "ओं  तत्सदिति  निर्देशः",
-          "iast": "ōṃ  tatsaditi  nirdēśaḥ"
+          "iast": "ōm  tatsaditi  nirdēśaḥ"
         },
         {
           "startTime": "1734.14",
@@ -1034,8 +1052,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "तस्मादोमित्युदाहृत्य",
-          "iast": "tasmādōmityudāhṛtya"
+          "text": "तस्माद् ओम् इत्युदाहृत्य",
+          "iast": "tasmād ōm ityudāhṛtya"
         },
         {
           "startTime": "1813.24",
@@ -1129,8 +1147,8 @@
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "सदित्येतत्प्रयुज्यते |",
-          "iast": "sadityētatprayujyatē |"
+          "text": "सदित्येतत् प्रयुज्यते |",
+          "iast": "sadityētat prayujyatē |"
         },
         {
           "startTime": "1977",

@@ -18,6 +18,10 @@
     headerPauseBeats: 3,     // pause (mātrās) after each header line — #36.1
     anustubhBeats: 3,        // anuṣṭubh verse line-end pause (mātrās) — #36.2
     tristubhBeats: 4.5,      // triṣṭubh verse line-end pause (mātrās) — #36.2
+    uvacaPauseBeats: 4,      // pause after each uvāca speaker label (mātrās) — #39
+    colophonPauseSeconds: 2, // pause before the colophon ("om tatsaditi") slide — #41
+    sarvadharmanPauseBeats: 3, // pause between colophon and sarvadharmān slide (mātrās) — #40
+    headerBpmDrop: 20,       // internal bpm drop on header slides (= 5 SPM), all chapters — #47
     theme: 'dark',           // projector theme: 'dark' (black bg) or 'light' (white bg) — #37
     sectionBpm: {}           // chapterId -> internal BPM override; empty = use data defaultBpm
   };
@@ -31,6 +35,10 @@
       headerPauseBeats: CHANT_DEFAULTS.headerPauseBeats,
       anustubhBeats: CHANT_DEFAULTS.anustubhBeats,
       tristubhBeats: CHANT_DEFAULTS.tristubhBeats,
+      uvacaPauseBeats: CHANT_DEFAULTS.uvacaPauseBeats,
+      colophonPauseSeconds: CHANT_DEFAULTS.colophonPauseSeconds,
+      sarvadharmanPauseBeats: CHANT_DEFAULTS.sarvadharmanPauseBeats,
+      headerBpmDrop: CHANT_DEFAULTS.headerBpmDrop,
       theme: CHANT_DEFAULTS.theme,
       sectionBpm: {}
     };
@@ -46,6 +54,10 @@
           if (typeof parsed.headerPauseBeats === 'number') merged.headerPauseBeats = parsed.headerPauseBeats;
           if (typeof parsed.anustubhBeats === 'number') merged.anustubhBeats = parsed.anustubhBeats;
           if (typeof parsed.tristubhBeats === 'number') merged.tristubhBeats = parsed.tristubhBeats;
+          if (typeof parsed.uvacaPauseBeats === 'number') merged.uvacaPauseBeats = parsed.uvacaPauseBeats;
+          if (typeof parsed.colophonPauseSeconds === 'number') merged.colophonPauseSeconds = parsed.colophonPauseSeconds;
+          if (typeof parsed.sarvadharmanPauseBeats === 'number') merged.sarvadharmanPauseBeats = parsed.sarvadharmanPauseBeats;
+          if (typeof parsed.headerBpmDrop === 'number') merged.headerBpmDrop = parsed.headerBpmDrop;
           if (parsed.theme === 'dark' || parsed.theme === 'light') merged.theme = parsed.theme;
           if (parsed.sectionBpm && typeof parsed.sectionBpm === 'object') {
             for (var k in parsed.sectionBpm) {
@@ -86,7 +98,8 @@
     renderer.setPaceConfig({
       headerPauseBeats: chantSettings.headerPauseBeats,
       anustubhBeats: chantSettings.anustubhBeats,
-      tristubhBeats: chantSettings.tristubhBeats
+      tristubhBeats: chantSettings.tristubhBeats,
+      uvacaPauseBeats: chantSettings.uvacaPauseBeats
     });
     // Projector theme — dark (black bg) / light (white bg) — #37
     sendToProjector('theme', { theme: chantSettings.theme });
@@ -95,7 +108,10 @@
   // The tempo the chapter should run at: set on chapter load (defaultBpm or current),
   // updated on manual SPM change. Colophon pages run at currentChapterBpm - colophonBpmDrop.
   var currentChapterBpm = 380;
-  var closerSlowApplied = false;
+  // Delta (internal bpm) currently applied to the running tempo for the displayed
+  // page: colophon/sarvadharmān slowdown (#40), header slowdown (#47), or a per-slide
+  // data offset (#46). 0 on normal pages. Used to recover the base on a manual nudge.
+  var pageTempoDelta = 0;
   var chapterSelect = document.getElementById('chapter-select');
   var shlokaSelect = document.getElementById('shloka-select');
 
@@ -192,7 +208,7 @@
       }
       // Capture the base tempo the chapter runs at (used to offset colophon pages).
       currentChapterBpm = animator.getState().bpm;
-      closerSlowApplied = false;
+      pageTempoDelta = 0;
       populateShlokaDropdown();
       currentPage = 0;
       showPage(0, blankProjector);
@@ -200,6 +216,26 @@
     } catch (err) {
       console.error('Load failed:', err);
     }
+  }
+
+  // Set the running tempo for a page relative to currentChapterBpm, applying the
+  // one relevant adjustment: per-slide data offset (#46), colophon/sarvadharmān
+  // slowdown (#40 — sarvadharmān keeps the colophon tempo instead of jumping back),
+  // or header slowdown across all chapters (#47). Normal pages run at the base.
+  function applyPageTempo(page) {
+    var delta = 0;
+    if (page) {
+      if (typeof page.bpmOffset === 'number') {
+        delta = page.bpmOffset;                                   // #46
+      } else if (page.isCloser || page.shlokaNum === 'sarvadharmān') {
+        delta = -chantSettings.colophonBpmDrop;                   // #40 (+ existing colophon)
+      } else if (page.isHeader) {
+        delta = -chantSettings.headerBpmDrop;                     // #47
+      }
+    }
+    pageTempoDelta = delta;
+    animator.setBpm(Math.max(40, currentChapterBpm + delta));
+    updateSpmDisplay();
   }
 
   // --- Page display ---
@@ -218,17 +254,10 @@
     updatePositionBar();
     shlokaSelect.value = currentPage;
 
-    // tempo sheet: slow colophon ("om tatsaditi") / ending pages by 5 SPM (20 internal bpm).
-    // Restore the chapter base tempo when leaving a colophon page.
-    if (page && page.isCloser) {
-      animator.setBpm(currentChapterBpm - chantSettings.colophonBpmDrop);
-      closerSlowApplied = true;
-      updateSpmDisplay();
-    } else if (closerSlowApplied) {
-      animator.setBpm(currentChapterBpm);
-      closerSlowApplied = false;
-      updateSpmDisplay();
-    }
+    // tempo sheet: colophon ("om tatsaditi") + sarvadharmān slowed by colophonBpmDrop
+    // (#40), header slides by headerBpmDrop (#47), per-slide data offsets (#46), and
+    // normal pages at the chapter base tempo.
+    applyPageTempo(page);
 
     if (blankProjector) {
       // Blank the projector now — header will appear after countdown
@@ -325,7 +354,8 @@
   // recover the intended base tempo.
   function noteManualTempoChange() {
     var runningBpm = animator.getState().bpm;
-    currentChapterBpm = closerSlowApplied ? runningBpm + chantSettings.colophonBpmDrop : runningBpm;
+    // Running bpm = base + pageTempoDelta; recover the base the operator intends.
+    currentChapterBpm = runningBpm - pageTempoDelta;
   }
 
   spmInput.addEventListener('change', function() {
@@ -391,9 +421,25 @@
       return;
     }
 
-    // Mid-chapter pages (headers included): advance immediately — old 3s pranam pause removed.
-    await nextPage();
-    animator.play();
+    // Mid-chapter pages (headers included). Insert a configurable pause before
+    // certain slides: #41 a brief pause before the colophon ("om tatsaditi"), and
+    // #40 a mātrā-based pause between the colophon and the trailing sarvadharmān.
+    var curPg = dataLayer.getPage(currentPage);
+    var nextPg = dataLayer.getPage(currentPage + 1);
+    var advDelayMs = 0;
+    if (nextPg) {
+      if (nextPg.isCloser) {
+        advDelayMs = chantSettings.colophonPauseSeconds * 1000;                     // #41
+      } else if (curPg && curPg.isCloser && nextPg.shlokaNum === 'sarvadharmān') {
+        advDelayMs = chantSettings.sarvadharmanPauseBeats * animator.getBeatMs();    // #40
+      }
+    }
+    if (advDelayMs > 0) {
+      setTimeout(async function() { await nextPage(); animator.play(); }, advDelayMs);
+    } else {
+      await nextPage();
+      animator.play();
+    }
   });
 
   // --- Pace indicators ---
@@ -571,6 +617,10 @@
   var fldHeaderPause = document.getElementById('set-header-pause');
   var fldAnustubh = document.getElementById('set-anustubh-pause');
   var fldTristubh = document.getElementById('set-tristubh-pause');
+  var fldUvacaPause = document.getElementById('set-uvaca-pause');
+  var fldColophonPause = document.getElementById('set-colophon-pause');
+  var fldSarvaPause = document.getElementById('set-sarvadharman-pause');
+  var fldHeaderBpmDrop = document.getElementById('set-header-bpm-drop');
   var fldTheme = document.getElementById('set-theme');
 
   // Build the per-section BPM rows once (label + number input keyed by chapterId).
@@ -633,6 +683,10 @@
     if (fldHeaderPause) fldHeaderPause.value = chantSettings.headerPauseBeats;
     if (fldAnustubh) fldAnustubh.value = chantSettings.anustubhBeats;
     if (fldTristubh) fldTristubh.value = chantSettings.tristubhBeats;
+    if (fldUvacaPause) fldUvacaPause.value = chantSettings.uvacaPauseBeats;
+    if (fldColophonPause) fldColophonPause.value = chantSettings.colophonPauseSeconds;
+    if (fldSarvaPause) fldSarvaPause.value = chantSettings.sarvadharmanPauseBeats;
+    if (fldHeaderBpmDrop) fldHeaderBpmDrop.value = chantSettings.headerBpmDrop;
     if (fldTheme) fldTheme.value = chantSettings.theme;
     for (var id in sectionBpmInputs) {
       if (!Object.prototype.hasOwnProperty.call(sectionBpmInputs, id)) continue;
@@ -663,6 +717,10 @@
     if (fldHeaderPause) chantSettings.headerPauseBeats = clampNum(fldHeaderPause.value, 0, 12, CHANT_DEFAULTS.headerPauseBeats);
     if (fldAnustubh) chantSettings.anustubhBeats = clampNum(fldAnustubh.value, 0, 12, CHANT_DEFAULTS.anustubhBeats);
     if (fldTristubh) chantSettings.tristubhBeats = clampNum(fldTristubh.value, 0, 12, CHANT_DEFAULTS.tristubhBeats);
+    if (fldUvacaPause) chantSettings.uvacaPauseBeats = clampNum(fldUvacaPause.value, 0, 12, CHANT_DEFAULTS.uvacaPauseBeats);
+    if (fldColophonPause) chantSettings.colophonPauseSeconds = clampNum(fldColophonPause.value, 0, 10, CHANT_DEFAULTS.colophonPauseSeconds);
+    if (fldSarvaPause) chantSettings.sarvadharmanPauseBeats = clampNum(fldSarvaPause.value, 0, 12, CHANT_DEFAULTS.sarvadharmanPauseBeats);
+    if (fldHeaderBpmDrop) chantSettings.headerBpmDrop = Math.round(clampNum(fldHeaderBpmDrop.value, 0, 80, CHANT_DEFAULTS.headerBpmDrop));
     if (fldTheme) chantSettings.theme = (fldTheme.value === 'light') ? 'light' : 'dark';
 
     // Per-section BPM: a value present → store internal = SPM*4; blank → clear override.
@@ -687,17 +745,31 @@
     if (curId !== null) {
       var override = chantSettings.sectionBpm[String(curId)];
       if (typeof override === 'number') {
-        animator.setBpm(override);
-        currentChapterBpm = animator.getState().bpm;
-        closerSlowApplied = false;
-        updateSpmDisplay();
+        currentChapterBpm = override;
+        // Re-apply the current page's tempo adjustment relative to the new base.
+        applyPageTempo(dataLayer.getPage(currentPage));
       }
     }
 
     // Re-render the current page so changed line-end pauses take effect immediately
-    // (the renderer encodes pauses into dataset at render time).
-    if (dataLayer.getCurrentChapterId() !== null && dataLayer.getPage(currentPage)) {
-      showPage(currentPage);
+    // (the renderer encodes pauses into dataset at render time) — but do NOT call
+    // showPage(), which resets the animator and blanks the projector pointer (#42).
+    // Mirror the display-mode switch: preserve animator state across the re-render,
+    // then re-announce the active syllable so the projector pointer stays in place.
+    var curChId = dataLayer.getCurrentChapterId();
+    if (curChId !== null && dataLayer.getPage(currentPage)) {
+      var savedState = animator.getState();
+      renderer.renderPage(dataLayer.getPage(currentPage));
+      animator.restore(savedState);
+      renderer.prefetchPage(currentPage + 1, curChId);
+      var rs = animator.getState();
+      if (rs.currentIndex >= 0) {
+        var bMs = Math.round(60000 / rs.bpm);
+        var els = renderer.getSyllableElements();
+        var el = els[rs.currentIndex];
+        var bts = el ? (parseInt(el.dataset.beats, 10) || 1) : 1;
+        sendToProjector('syllable-update', { index: rs.currentIndex, state: 'active', beatMs: bMs, durationMs: bts * bMs });
+      }
     }
 
     closeSettings();

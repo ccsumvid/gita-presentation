@@ -168,7 +168,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "ऐश्वरम्  पुरुषोत्तम ||3||",
-          "iast": "aiśvaram  puruṣōttama ||3||"
+          "iast": "aiśvaraṃ  puruṣōttama ||3||"
         }
       ],
       "syllables": 35,
@@ -1027,8 +1027,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "रूपं  महत्ते  बहुवक्त्र  नेत्रं",
-          "iast": "rūpaṃ  mahattē  bahuvaktra  nētraṃ"
+          "text": "रूपं  महत्ते  बहुवक्त्रनेत्रं",
+          "iast": "rūpaṃ  mahattē  bahuvaktranētraṃ"
         },
         {
           "startTime": "2034.08",
@@ -1475,8 +1475,8 @@
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "जित्वा  शत्रून्भुङ्क्ष्व  राज्यं  समृद्धम् |",
-          "iast": "jitvā  śatrūnbhuṅkṣva  rājyaṃ  samṛddham |"
+          "text": "जित्वा  शत्रून् भुङ्क्ष्व  राज्यं  समृद्धम् |",
+          "iast": "jitvā  śatrūn bhuṅkṣva  rājyaṃ  samṛddham |"
         },
         {
           "startTime": "3006.93",
@@ -1519,7 +1519,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "कर्णं  तथान्यानपि  योधवीरान् |",
-          "iast": "karṇaṃ  tathānyānapi  yōdhavīrān |"
+          "iast": "karṇaṃ  tathā'nyānapi  yōdhavīrān |"
         },
         {
           "startTime": "3100.58",
@@ -1915,7 +1915,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "पितासि  लोकस्य  चराचरस्य",
-          "iast": "pitāsi  lōkasya  carācarasya"
+          "iast": "pitā'si  lōkasya  carācarasya"
         },
         {
           "startTime": "3936.89",
@@ -2018,8 +2018,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "तदेव  मे  दर्शय  देवरूपं",
-          "iast": "tadēva  mē  darśaya  dēvarūpaṃ"
+          "text": "तदेव  मे  दर्शय  देव रूपं",
+          "iast": "tadēva  mē  darśaya  dēva rūpaṃ"
         },
         {
           "startTime": "4129.04",

@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.11.0] - 2026-07-01
+
+Batch of parayana QA follow-ups from Sphoorthi (#27, #34, #37–#48).
+
+### Fixed
+- **Settings now apply live** (#42): saving the settings panel no longer resets the animation pointer or blanks the projector — settings apply in place without halting the chant.
+- **Projector theme & verse zoom now work** (#37, #34): the `theme` and `verse-zoom` messages were being dropped before reaching the projector window (missing from the IPC allow-lists). Light theme and verse zoom now actually change the projected screen.
+- **Sloka line structure** (#27): 6.23, 13.8, 17.9, 17.14 re-lined to one pāda per line (break at the compound hyphen); removed a stray `śrī bhagavānuvāca` in 18.3.
+- **Pada text corrections** (#38): 62 spacing/spelling fixes across chapters 1–18 per the Sloka Master List, plus ch11.3 anusvāra.
+- **Dhyāna re-spacing** (#38): the 7 Dhyāna slokas' romanization re-spaced to match the reference PDF.
+- **Gita Sāram** (#45): Sloka Pallavi rebuilt (runs twice after Shloka 18, then the first pāda ×4), stray closer removed, slokas 8/10/15 text + line breaks fixed.
+
+### Added
+- **Configurable uvāca pause** (#39): default raised to 4 mātrās, editable in settings.
+- **Header slowdown** (#47): header slides run a configurable BPM drop (default −5 SPM) across all chapters.
+- **Colophon & Sarva Dharman pacing** (#40, #41): configurable pause before the colophon (default 2s); the Sarva Dharman slide keeps the colophon tempo (no jump back) with a configurable pause before it (default 3 mātrās).
+- **Gita Mahātmyam pacing** (#44): per-chapter 2.5-mātrā line pause (was over-pausing as mislabeled triṣṭubh).
+- **Gita Ārati** (#43): `mayya` + pāda-2 refrain, pāda 3 repeated twice, and the missing Pallavi slide re-added.
+- **Samarpana slide 4** (#46): runs −10 SPM (both occurrences) to sync with the diction.
+
+### Changed
+- **App renamed** to **Mahāyajña Parayana App** (#48).
+
 ## [0.10.5] - 2026-06-17
 
 QA follow-ups (#36) + theme (#37).

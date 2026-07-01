@@ -469,7 +469,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "अनेन प्रसविष्यध्वं",
-          "iast": "anēna prasaviṣyadhvaṃ"
+          "iast": "anēna prasaviṣyadhvam"
         },
         {
           "startTime": "855.798",
@@ -477,8 +477,8 @@
           "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "एष  वोऽस्त्विष्टकामधुक् ||10||",
-          "iast": "ēṣa  vō'stviṣṭakāmadhuk ||10||"
+          "text": "एषवोऽस्त्विष्टकामधुक् ||10||",
+          "iast": "ēṣavō'stviṣṭakāmadhuk ||10||"
         }
       ],
       "syllables": 33,
@@ -881,7 +881,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "कर्मणैव  हि  संसिद्धिं",
-          "iast": "karmaṇaiva  hi  saṃsiddhiṃ"
+          "iast": "karmaṇaiva  hi  saṃsiddhim"
         },
         {
           "startTime": "1718.02",
@@ -1862,8 +1862,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "मनसस्तु  पराबुद्धिः",
-          "iast": "manasastu  parābuddhiḥ"
+          "text": "मनसस्तु  परा बुद्धिः",
+          "iast": "manasastu  parā buddhiḥ"
         },
         {
           "startTime": "3689.56",

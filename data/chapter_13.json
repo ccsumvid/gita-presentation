@@ -365,7 +365,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "अमानित्वमदंभित्वम्",
-          "iast": "amānitvamadaṃbhitvam"
+          "iast": "amānitvamadambhitvam"
         },
         {
           "startTime": "636.16",
@@ -422,11 +422,20 @@
         {
           "startTime": "730.227",
           "endTime": "738.103",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "जन्ममृत्युजराव्याधि-",
+          "iast": "janmamṛtyujarāvyādhi-"
+        },
+        {
+          "startTime": "730.227",
+          "endTime": "738.103",
           "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "जन्ममृत्युजराव्याधि-दुःखदोषानुदर्शनम् ||8||",
-          "iast": "janmamṛtyujarāvyādhi-duḥkhadōṣānudarśanam ||8||"
+          "text": "दुःखदोषानुदर्शनम् ||8||",
+          "iast": "duḥkhadōṣānudarśanam ||8||"
         }
       ],
       "syllables": 34,
@@ -683,8 +692,8 @@
           "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "निर्गुणं गुणभोक्तृ च ||14||",
-          "iast": "nirguṇaṃ guṇabhōktṛ ca ||14||"
+          "text": "निर्गुणं गुणभोक्तृच ||14||",
+          "iast": "nirguṇaṃ guṇabhōktṛca ||14||"
         }
       ],
       "syllables": 33,
@@ -890,7 +899,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "विकारांश्च गुणांश्चैव",
-          "iast": "vikārāṃśca guṇāṃścaiva"
+          "iast": "vikārāmśca guṇāmścaiva"
         },
         {
           "startTime": "1571.34",

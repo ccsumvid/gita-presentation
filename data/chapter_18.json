@@ -144,15 +144,6 @@
       "shlokaNum": "3",
       "entry": [
         {
-          "startTime": "175.177",
-          "endTime": "178.976",
-          "swhtsp": "l",
-          "shlNbr": "2",
-          "sty": "",
-          "text": "श्री  भगवानुवाच -",
-          "iast": "śrī  bhagavānuvāca -"
-        },
-        {
           "startTime": "222.276",
           "endTime": "227.877",
           "swhtsp": "p",
@@ -176,8 +167,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "यज्ञदानतपःकर्म",
-          "iast": "yajñadānatapaḥkarma"
+          "text": "यज्ञदानतपः कर्म",
+          "iast": "yajñadānatapaḥ karma"
         },
         {
           "startTime": "254.133",
@@ -779,7 +770,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "हत्वाऽपि  स  इमाँल्लोकान्",
-          "iast": "hatvā'pi  sa  imā~llōkān"
+          "iast": "hatvā'pi  sa  imāllōkān"
         },
         {
           "startTime": "1352.93",
@@ -941,8 +932,8 @@
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "नानाभावान्पृथग्विधान् |",
-          "iast": "nānābhāvānpṛthagvidhān |"
+          "text": "नानाभावान् पृथग्विधान् |",
+          "iast": "nānābhāvān pṛthagvidhān |"
         },
         {
           "startTime": "1647.1",
@@ -3187,7 +3178,7 @@
           "shlNbr": "00",
           "sty": "",
           "text": "सोऽपि मुक्तः शुभाँल्लोकान्",
-          "iast": "sō'pi muktaḥ śubhā~llōkān"
+          "iast": "sō'pi muktaḥ śubhāllōkān"
         },
         {
           "startTime": "5385.48",
@@ -3238,8 +3229,8 @@
           "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "प्रणष्टस्ते  धनञ्जय ||72||",
-          "iast": "praṇaṣṭastē  dhanañjaya ||72||"
+          "text": "प्रनष्टस्ते  धनञ्जय ||72||",
+          "iast": "pranaṣṭastē  dhanañjaya ||72||"
         }
       ],
       "syllables": 32,
@@ -3401,8 +3392,8 @@
           "swhtsp": "p",
           "shlNbr": "00",
           "sty": "",
-          "text": "राजन्संस्मृत्य  संस्मृत्य",
-          "iast": "rājansaṃsmṛtya  saṃsmṛtya"
+          "text": "राजन् संस्मृत्य  संस्मृत्य",
+          "iast": "rājan saṃsmṛtya  saṃsmṛtya"
         },
         {
           "startTime": "5754.88",

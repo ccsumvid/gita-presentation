@@ -695,9 +695,24 @@
     }
 
     // Re-render the current page so changed line-end pauses take effect immediately
-    // (the renderer encodes pauses into dataset at render time).
-    if (dataLayer.getCurrentChapterId() !== null && dataLayer.getPage(currentPage)) {
-      showPage(currentPage);
+    // (the renderer encodes pauses into dataset at render time) — but do NOT call
+    // showPage(), which resets the animator and blanks the projector pointer (#42).
+    // Mirror the display-mode switch: preserve animator state across the re-render,
+    // then re-announce the active syllable so the projector pointer stays in place.
+    var curChId = dataLayer.getCurrentChapterId();
+    if (curChId !== null && dataLayer.getPage(currentPage)) {
+      var savedState = animator.getState();
+      renderer.renderPage(dataLayer.getPage(currentPage));
+      animator.restore(savedState);
+      renderer.prefetchPage(currentPage + 1, curChId);
+      var rs = animator.getState();
+      if (rs.currentIndex >= 0) {
+        var bMs = Math.round(60000 / rs.bpm);
+        var els = renderer.getSyllableElements();
+        var el = els[rs.currentIndex];
+        var bts = el ? (parseInt(el.dataset.beats, 10) || 1) : 1;
+        sendToProjector('syllable-update', { index: rs.currentIndex, state: 'active', beatMs: bMs, durationMs: bts * bMs });
+      }
     }
 
     closeSettings();

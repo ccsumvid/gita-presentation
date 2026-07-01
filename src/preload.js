@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
       'render-page', 'syllable-update', 'animation-reset',
       'countdown', 'display-mode', 'spm-change',
       'show-instruction', 'dismiss-instruction',
+      'verse-zoom', 'theme',
       'open-projector', 'close-projector',
       'open-url'
     ];
@@ -18,6 +19,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
       'render-page', 'syllable-update', 'animation-reset',
       'countdown', 'display-mode', 'spm-change',
       'show-instruction', 'dismiss-instruction',
+      'verse-zoom', 'theme',
       'projector-status',
       'update-available'
     ];

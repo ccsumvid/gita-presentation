@@ -10,7 +10,7 @@
   },
   "build": {
     "appId": "com.gitapacer.app",
-    "productName": "Gita Parayana Pace Helper",
+    "productName": "Mahāyajña Parayana App",
     "icon": "build/icon.png",
     "directories": {
       "output": "dist"

@@ -997,11 +997,20 @@
         {
           "startTime": "1903.49",
           "endTime": "1913.01",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "तं  विद्यात्  दुःखसंयोग-",
+          "iast": "taṃ  vidyāt  duḥkhasaṃyōga-"
+        },
+        {
+          "startTime": "1903.49",
+          "endTime": "1913.01",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "तं  विद्यात्  दुःखसंयोगवियोगं  योगसञ्ज्ञितम् |",
-          "iast": "taṃ  vidyāt  duḥkhasaṃyōgaviyōgaṃ  yōgasañjñitam |"
+          "text": "वियोगं  योगसञ्ज्ञितम् |",
+          "iast": "viyōgaṃ  yōgasañjñitam |"
         },
         {
           "startTime": "1924.31",

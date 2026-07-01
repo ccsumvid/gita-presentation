@@ -422,11 +422,20 @@
         {
           "startTime": "730.227",
           "endTime": "738.103",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "जन्ममृत्युजराव्याधि-",
+          "iast": "janmamṛtyujarāvyādhi-"
+        },
+        {
+          "startTime": "730.227",
+          "endTime": "738.103",
           "swhtsp": "",
           "shlNbr": "00",
           "sty": "",
-          "text": "जन्ममृत्युजराव्याधि-दुःखदोषानुदर्शनम् ||8||",
-          "iast": "janmamṛtyujarāvyādhi-duḥkhadōṣānudarśanam ||8||"
+          "text": "दुःखदोषानुदर्शनम् ||8||",
+          "iast": "duḥkhadōṣānudarśanam ||8||"
         }
       ],
       "syllables": 34,

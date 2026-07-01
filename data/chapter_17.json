@@ -404,11 +404,20 @@
         {
           "startTime": "667.272",
           "endTime": "675.379",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "कट्वम्ललवणात्युष्ण-",
+          "iast": "kaṭvamlalavaṇātyuṣṇa-"
+        },
+        {
+          "startTime": "667.272",
+          "endTime": "675.379",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "कट्वम्ललवणात्युष्ण-तीक्ष्णरूक्षविदाहिनः |",
-          "iast": "kaṭvamlalavaṇātyuṣṇa-tīkṣṇarūkṣavidāhinaḥ |"
+          "text": "तीक्ष्णरूक्षविदाहिनः |",
+          "iast": "tīkṣṇarūkṣavidāhinaḥ |"
         },
         {
           "startTime": "686.132",
@@ -610,11 +619,20 @@
         {
           "startTime": "1046.05",
           "endTime": "1054.05",
+          "swhtsp": "p",
+          "shlNbr": "00",
+          "sty": "",
+          "text": "देवद्विजगुरुप्राज्ञ-",
+          "iast": "dēvadvijaguruprājña-"
+        },
+        {
+          "startTime": "1046.05",
+          "endTime": "1054.05",
           "swhtsp": "l",
           "shlNbr": "00",
           "sty": "",
-          "text": "देवद्विजगुरुप्राज्ञ-पूजनं शौचमार्जवम् |",
-          "iast": "dēvadvijaguruprājña-pūjanaṃ śaucamārjavam |"
+          "text": "पूजनं शौचमार्जवम् |",
+          "iast": "pūjanaṃ śaucamārjavam |"
         },
         {
           "startTime": "1063.29",

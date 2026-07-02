@@ -410,7 +410,14 @@ hr { border: none; border-top: 1px solid #333; margin: 0; }
       </select>
     </div>
 
-    <div class="settings-subtitle">Per-section tempo (SPM) — blank = manual / no default</div>
+    <div class="settings-subtitle">
+      Sections to chant &amp; per-section tempo — checkbox = include in today's parayana
+      (all checked = regular full parayana); SPM blank = manual / no default.
+      <span class="settings-section-actions">
+        <button type="button" id="btn-sections-all">Select all</button>
+        <button type="button" id="btn-sections-none">Select none</button>
+      </span>
+    </div>
     <div id="settings-section-list" class="settings-section-list"></div>
 
     <div class="settings-actions">

@@ -23,7 +23,8 @@
     sarvadharmanPauseBeats: 3, // pause between colophon and sarvadharmān slide (mātrās) — #40
     headerBpmDrop: 20,       // internal bpm drop on header slides (= 5 SPM), all chapters — #47
     theme: 'dark',           // projector theme: 'dark' (black bg) or 'light' (white bg) — #37
-    sectionBpm: {}           // chapterId -> internal BPM override; empty = use data defaultBpm
+    sectionBpm: {},          // chapterId -> internal BPM override; empty = use data defaultBpm
+    enabledSections: []      // chapters to chant this parayana (#34); empty = ALL (regular parayana)
   };
 
   function loadChantSettings() {
@@ -40,7 +41,8 @@
       sarvadharmanPauseBeats: CHANT_DEFAULTS.sarvadharmanPauseBeats,
       headerBpmDrop: CHANT_DEFAULTS.headerBpmDrop,
       theme: CHANT_DEFAULTS.theme,
-      sectionBpm: {}
+      sectionBpm: {},
+      enabledSections: []
     };
     try {
       var raw = window.localStorage.getItem('gitaChantSettings');
@@ -65,6 +67,9 @@
                 merged.sectionBpm[k] = parsed.sectionBpm[k];
               }
             }
+          }
+          if (Array.isArray(parsed.enabledSections)) {
+            merged.enabledSections = parsed.enabledSections.filter(function(x) { return typeof x === 'string'; });
           }
         }
       }
@@ -103,6 +108,8 @@
     });
     // Projector theme — dark (black bg) / light (white bg) — #37
     sendToProjector('theme', { theme: chantSettings.theme });
+    // Active parayana subset (#34) — empty array = all chapters (regular parayana).
+    dataLayer.setActiveChapters(chantSettings.enabledSections);
   }
 
   // The tempo the chapter should run at: set on chapter load (defaultBpm or current),
@@ -626,10 +633,12 @@
   // Build the per-section BPM rows once (label + number input keyed by chapterId).
   // Displayed value is SPM = internal bpm / 4 (matches the rest of the UI); we store
   // internal = SPM * 4. Section labels reuse the chapter dropdown's option text.
-  var sectionBpmInputs = {}; // chapterId -> input element
+  var sectionBpmInputs = {};    // chapterId -> BPM input element
+  var sectionEnableInputs = {}; // chapterId -> "include in parayana" checkbox (#34)
   function buildSectionBpmRows() {
     while (settingsSectionList.firstChild) settingsSectionList.removeChild(settingsSectionList.firstChild);
     sectionBpmInputs = {};
+    sectionEnableInputs = {};
     var labelById = {};
     for (var oi = 0; oi < chapterSelect.options.length; oi++) {
       labelById[chapterSelect.options[oi].value] = chapterSelect.options[oi].textContent;
@@ -639,6 +648,15 @@
       var id = order[i];
       var row = document.createElement('div');
       row.className = 'settings-section-row';
+
+      // Include-in-parayana checkbox (#34). All checked = regular full parayana.
+      var chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.className = 'settings-section-enable';
+      chk.checked = true;
+      chk.dataset.chapterId = id;
+      chk.title = 'Include this section in the parayana';
+      row.appendChild(chk);
 
       var lbl = document.createElement('span');
       lbl.className = 'settings-section-name';
@@ -655,8 +673,23 @@
       row.appendChild(inp);
 
       sectionBpmInputs[id] = inp;
+      sectionEnableInputs[id] = chk;
       settingsSectionList.appendChild(row);
     }
+  }
+
+  // Resolve enabledSections → the set of checked chapter IDs. Empty array or
+  // "all checked" both mean the regular full parayana.
+  function readEnabledSections() {
+    var ids = [];
+    var order = dataLayer.CHAPTER_ORDER;
+    var allChecked = true;
+    for (var i = 0; i < order.length; i++) {
+      var id = order[i];
+      var chk = sectionEnableInputs[id];
+      if (chk && chk.checked) { ids.push(id); } else { allChecked = false; }
+    }
+    return allChecked ? [] : ids; // [] = all (regular parayana)
   }
 
   // Effective internal BPM for a section: Settings override, else data defaultBpm.
@@ -693,7 +726,25 @@
       var internal = effectiveSectionBpm(id);
       sectionBpmInputs[id].value = (internal === null) ? '' : Math.round(internal / 4);
     }
+    // #34 include checkboxes: empty enabledSections = all sections (regular parayana).
+    var enabled = chantSettings.enabledSections || [];
+    var allOn = enabled.length === 0;
+    for (var eid in sectionEnableInputs) {
+      if (!Object.prototype.hasOwnProperty.call(sectionEnableInputs, eid)) continue;
+      sectionEnableInputs[eid].checked = allOn || enabled.indexOf(eid) >= 0;
+    }
   }
+
+  // #34 Select all / none for the parayana section checkboxes.
+  function setAllSectionsEnabled(on) {
+    for (var id in sectionEnableInputs) {
+      if (Object.prototype.hasOwnProperty.call(sectionEnableInputs, id)) sectionEnableInputs[id].checked = on;
+    }
+  }
+  var btnSectionsAll = document.getElementById('btn-sections-all');
+  var btnSectionsNone = document.getElementById('btn-sections-none');
+  if (btnSectionsAll) btnSectionsAll.addEventListener('click', function() { setAllSectionsEnabled(true); });
+  if (btnSectionsNone) btnSectionsNone.addEventListener('click', function() { setAllSectionsEnabled(false); });
 
   function openSettings() {
     refreshSettingsInputs();
@@ -733,6 +784,9 @@
         chantSettings.sectionBpm[id] = Math.round(spm) * 4;
       }
     }
+
+    // #34 which sections to chant this parayana (empty = all / regular).
+    chantSettings.enabledSections = readEnabledSections();
 
     saveChantSettings();
     applyChantSettings();
@@ -792,6 +846,8 @@
   });
 
   // --- Init ---
-  applyChantSettings();              // push pace config + theme before the first render
-  loadChapter('datta_stavam', true); // start with blank projector until Play
+  applyChantSettings();              // push pace config + theme + active subset (#34) before first render
+  // Start at the first section of the active parayana subset (#34); defaults to
+  // 'datta_stavam' when all sections are enabled (regular parayana).
+  loadChapter(dataLayer.getFirstActiveChapterId() || 'datta_stavam', true);
 })();

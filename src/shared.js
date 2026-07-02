@@ -575,6 +575,10 @@ const dataLayer = (function() {
   let chapterName = '';
   let currentChapterId = null;
   const cache = {}; // chapterId -> parsed JSON data
+  // Active subset of chapters for this parayana (#34). null = all chapters
+  // (the default regular parayana). When set, next/prev traversal skips
+  // chapters not in the subset, but manual jumps to any chapter still work.
+  let activeChapters = null;
 
   function groupIntoPages(shlokas, chapterLineEndPause) {
     const result = [];
@@ -683,19 +687,43 @@ const dataLayer = (function() {
     return currentChapterId;
   }
 
+  // Set the active parayana subset (#34). Pass an array of chapter IDs to limit
+  // auto-advance to those (canonical order preserved); pass null/empty for all.
+  function setActiveChapters(ids) {
+    if (Array.isArray(ids) && ids.length > 0) {
+      activeChapters = CHAPTER_ORDER.filter(function(c) { return ids.indexOf(c) >= 0; });
+      if (activeChapters.length === 0) activeChapters = null;
+    } else {
+      activeChapters = null;
+    }
+  }
+
+  function isActive(id) {
+    return activeChapters === null || activeChapters.indexOf(id) >= 0;
+  }
+
+  // First chapter of the active subset (where a subset parayana starts).
+  function getFirstActiveChapterId() {
+    return (activeChapters && activeChapters.length) ? activeChapters[0] : CHAPTER_ORDER[0];
+  }
+
   function getNextChapterId() {
     var idx = CHAPTER_ORDER.indexOf(currentChapterId);
-    if (idx >= 0 && idx < CHAPTER_ORDER.length - 1) return CHAPTER_ORDER[idx + 1];
+    for (var i = idx + 1; i < CHAPTER_ORDER.length; i++) {
+      if (isActive(CHAPTER_ORDER[i])) return CHAPTER_ORDER[i];
+    }
     return null;
   }
 
   function getPrevChapterId() {
     var idx = CHAPTER_ORDER.indexOf(currentChapterId);
-    if (idx > 0) return CHAPTER_ORDER[idx - 1];
+    for (var i = idx - 1; i >= 0; i--) {
+      if (isActive(CHAPTER_ORDER[i])) return CHAPTER_ORDER[i];
+    }
     return null;
   }
 
-  return { fetchChapter, getPage, getPageCount, getChapterName, getCurrentChapterId, getNextChapterId, getPrevChapterId, CHAPTER_ORDER };
+  return { fetchChapter, getPage, getPageCount, getChapterName, getCurrentChapterId, getNextChapterId, getPrevChapterId, setActiveChapters, getFirstActiveChapterId, CHAPTER_ORDER };
 })();
 
 // ============================================================

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.12.0] - 2026-07-01
+
+### Added
+- **Chapter/section selection** (#34): operator settings now let you pick which sections to chant on a given day — an "include in parayana" checkbox per section, plus Select all/none. **Default is all sections (regular full parayana)** — no selection required. When a subset is chosen, auto-advance follows only the selected sections in canonical order and the parayana starts at the first selected one; manual chapter jumps still reach any section. Persisted across sessions.
+
 ## [0.11.0] - 2026-07-01
 
 Batch of parayana QA follow-ups from Sphoorthi (#27, #34, #37–#48).

@@ -1,6 +1,6 @@
 {
   "name": "gita-pacer",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -31,7 +31,8 @@
           ]
         }
       ],
-      "category": "public.app-category.education"
+      "category": "public.app-category.education",
+      "identity": null
     },
     "win": {
       "target": "nsis"

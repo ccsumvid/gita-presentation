@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.1] - 2026-07-01
+
+### Fixed
+- **macOS app crashed on launch** — electron-builder was auto-signing with an "Apple Distribution" (Mac App Store) certificate, which macOS kills at startup when the app runs outside the App Store. Switched to ad-hoc signing (`mac.identity: null`); the DMG now launches after the standard Gatekeeper approval. (The v0.11.0 / v0.12.0 macOS DMGs were affected; Windows builds were not.)
+
+### Changed
+- **New app icon** — Krishna–Arjuna chariot artwork with the Mahāyajña Parayana title.
+
 ## [0.12.0] - 2026-07-01
 
 ### Added
